@@ -1,0 +1,327 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block title %} My Investment{% endblock %}
+
+{% block content %}
+
+<head>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        * {
+            font-family: Montserrat;
+        }
+
+        .heading_label {
+            border-radius: 0px 0px 0px 47px;
+            background-color: #3F3F3F;
+            height: 126px;
+        }
+
+        .plan-card-div {
+            background: linear-gradient(180deg, #858181 0%, #454444 38.36%, #000000 100%);
+            padding: 04px 8px;
+            border-radius: 10px;
+            box-shadow: rgba(0, 0, 0, 0.24) 0px 3px 8px;
+
+        }
+
+        .home-page-heading-white {
+            color: white;
+            font-size: 15px;
+            font-weight: 400;
+            line-height: 19px;
+        }
+
+        .home-page-sub-heading-white {
+            color: white;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .invest-card {
+            min-width: 125px;
+            height: 210px;
+            box-shadow: 0px 0px 6px 0px #00000040;
+            border-radius: 17px;
+        }
+
+        .plan-name {
+            font-size: 8px;
+            font-weight: 700;
+            color: rgba(39, 38, 38, 1);
+        }
+
+        .invest-plan-text {
+            font-size: 8px;
+            font-weight: 400;
+            color: rgba(39, 38, 38, 0.51);
+        }
+
+        .underline {
+            border-bottom: 1.8px dotted #2726264F;
+            ;
+
+        }
+
+        .popup-heading {
+            font-size: 11px;
+            font-weight: 300;
+            color: #3F3F3F;
+        }
+
+        .popup-price {
+            font-size: 11px;
+            font-weight: 300;
+            color: #000AFF;
+        }
+    </style>
+</head>
+<!-- graf -->
+<div class="mx-auto text-center">
+    <h4 id="snackbar_error"></h4>
+</div>
+<div class="mx-auto col-sm-10">
+    <h4 id="snackbar"></h4>
+</div>
+<div>
+
+    <div class="heading_label text-center pt-4">
+        <h2 style="font-size: 18px; font-weight: 500; color: rgba(255, 255, 255, 1);">Device</h2>
+    </div>
+    <div class="d-flex justify-content-evenly p-0" style="margin-top: -30px;">
+        <div class="col-5 plan-card-div">
+            <div class="m-1 text-center pt-2">
+                <div>
+                    <span class="home-page-heading-white">My Device </span>
+                </div>
+                <div class="m-1">
+                    <span class="home-page-sub-heading-white">{{User_plans_count}}</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-5 plan-card-div">
+            <div class="m-1 text-center pt-2">
+                <div>
+                    <span class="home-page-heading-white">Total Income </span>
+                </div>
+                <div class="m-1">
+                    <span class="home-page-sub-heading-white">Rs {{total_user_income}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<div class="graf mb-5 mt-2 p-0 m-0 row justify-content-evenly">
+
+    <!-- <div class="  graf_content" id=""> -->
+    <!-- <div class="tab-pane fade show active padi" id="tab1" role="tabpanel" aria-labelledby="home-tab-md"> -->
+    {% if messages %}
+    {% for message in messages %}
+    {% if message.tags == 'error' %}
+    <script>
+        var snackbar = document.getElementById("snackbar_error");
+        snackbar.className = "show";
+        snackbar.textContent = '{{ message }}'
+        setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+    </script>
+    {% else %}
+    <script>
+        var snackbar2 = document.getElementById("snackbar_error");
+        snackbar2.className = "show";
+        snackbar2.textContent = '{{ message }}'
+        setTimeout(function () { snackbar2.className = snackbar2.className.replace("show", ""); }, 3000);
+    </script>
+    {% endif %}
+    {% endfor %}
+    {% endif %}
+    {% for i in all_plans %}
+    <div class="invest-card m-1 mt-3 p-0 col-5 col-lg-3 col-md-5 ">
+        <span class="m-2"
+            style="padding: 1px 1px; font-size: 11px; font-weight: 500; background-color: rgba(39, 38, 38, 1); border-radius: 15px; color: white;"><img
+                src="{% static 'images/vip-pass1.png' %}" style="width: 16px; height: 15px;" />
+           <span class="pe-1"> {{i.plan_level}}</span>
+        </span>
+        <div>
+            <div class="text-center">
+                {% if i.image %}
+                    <img src="/media/{{i.image}}" alt="Image" style="height: 90px;"/>
+                {% else %}
+                    <img src="{% static 'images/plan-img.png' %}" style="height: 90px;" />
+                {% endif %}
+            </div>
+            <span class="plan-name ms-2">{{i.name}}</span>
+            <div>
+
+                <span class="px-2 pe-4"
+                    style="background-color: rgba(105, 102, 102, 1); font-size: 14px; font-weight: 700; color: rgba(255, 255, 255, 1); border-radius: 0px 9px 9px 0px;">
+                    Price {{i.price}}
+                </span>
+            </div>
+
+            <h5 class="invest-plan-text ms-2 mt-1">Daily Rs {{i.daily_income}} </h5>
+            <h5 class="invest-plan-text ms-2 mt-1">Limit: {{i.quantity_limit}}</h5>
+            <div class="d-flex justify-content-between">
+                <h5 class="invest-plan-text ms-2 pt-1">Cycle {{i.plan_duration}} Days</h5>
+
+                <button class="btn p-0 m-0 me-1" id="buy-btn" type="submit" data-bs-toggle="modal"
+                    data-bs-target="#exampleModal{{i.id}}" style="cursor: pointer;">
+                    <span style="color: white;width: auto; background-color: #272626; border-radius: 50%">
+                        <i class="fa-solid fa-plus p-1" style="color: white; width: 22px;"></i>
+                    </span>
+                </button>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="modal" id="exampleModal{{i.id}}"  tabindex="-1" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content mx-1" style="border-radius: 25px; background: linear-gradient(180deg, #E6E6E6 0%, #FFFFFF 100%);
+                ; box-shadow: 0px 0px 8px 0px rgba(0, 0, 0, 0.33);">
+                <div class="modal-header d-flex justify-content-between p-0 border-0">
+                    <!-- <h1 class="modal-title fs-5 text-center"  id="staticBackdropLabel">{{i.name}}
+                        </h1> -->
+                    <div class="text-center">
+                        <span class="" style="font-size: 12px; font-weight: 700; color: #3F3F3F;">{{i.name}}</span>
+                        <div>
+                            <span class="px-3 pe-3"
+                                style="background-color: #3F3F3F; font-size: 25px; font-weight: 500; color: rgba(255, 255, 255, 1); border-radius: 0px 16px 16px 0px;">
+                                Rs. {{i.price}}
+                            </span>
+                            <h5 class="mt-1" style="font-size: 10px; font-weight: 400; color: #000000;">Investment Price
+                            </h5>
+                        </div>
+                    </div>
+                    <div class="me-3 mt-3">
+                        <img src="{% static 'images/pngegg4.png' %}" style="width: 85px; height: 90px;" />
+                    </div>
+                </div>
+
+                <div class="modal-body p-0 m-0 mx-3">
+                    <div class="popup-footer">
+                        <div class="invite_income">
+                            <h5 class="invest-plan-text p-1 text-center" style=" border-bottom: 1.5px solid #2726264F;">
+                                Income Details</h5>
+                            <div class="border-0">
+                                <div class="d-flex justify-content-between p-1">
+                                    <div>
+                                        <span class="popup-heading">Hourly income</span>
+                                    </div>
+                                    <div>
+                                        <span class="popup-price">Rs {{i.hourly_income}}</span>
+
+                                    </div>
+                                </div>
+                                <div class="underline"></div>
+
+                                <div class="d-flex justify-content-between p-1">
+                                    <div>
+                                        <span class="popup-heading">Daily Income</span>
+                                    </div>
+                                    <div>
+                                        <span class="popup-price">Rs {{i.daily_income}}</span>
+                                    </div>
+                                </div>
+                                <div class="underline"></div>
+                                <div class="d-flex justify-content-between p-1">
+                                    <div>
+                                        <span class="popup-heading">Total Income</span>
+                                    </div>
+                                    <div>
+                                        <span class="popup-price">Rs {{i.total_income}}</span>
+                                    </div>
+                                </div>
+                                <div class="underline"></div>
+                                <div class="d-flex justify-content-between p-1">
+                                    <div>
+                                        <span class="popup-heading">Cycle Days</span>
+                                    </div>
+                                    <div>
+                                        <span class="popup-price">{{i.plan_duration}} Days</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-3">
+                            {% if i.price > user_wallet.balance %}
+                            <button class="btn btn-dark w-100 mb-2 buy-btn" onclick="validate{{i.id}}()"
+                                style="cursor: pointer; background: rgba(63, 63, 63, 1);color:white" >
+                                Invest
+                            </button>
+                            <div class="text-center"> <button type="button" class="" data-bs-dismiss="modal"
+                                aria-label="Close" style="background-color: transparent;">Cancel</button>
+                            </div>
+                            {% else %}
+                            {% for j in plan_buy_count %}
+                                {% if forloop.parentloop.counter == forloop.counter %}
+                                    {% if j == i.quantity_limit or j > i.quantity_limit %}
+                                        <button class="btn btn-dark w-100 mb-2 buy-btn" onclick="validatelimit{{i.id}}()"
+                                            style="cursor: pointer; background: rgba(63, 63, 63, 1);">
+                                            Invest
+                                        </button>
+                                        <div class="text-center"> <button type="button" class="" data-bs-dismiss="modal"
+                                            aria-label="Close" style="background-color: transparent;">Cancel</button>
+                                        </div>
+                                    {% else %}
+                                        <form method="POST" action="/plans/">
+                                            {% csrf_token %}
+                                            <input type="text" value="{{i.name}}" name="plan" hidden>
+                                            <div class="mx-4">
+                                                <button class="buy-btn w-100"
+                                                    style="background-color: rgba(63, 63, 63, 1); color: white;" id="buy-btn"
+                                                    type="submit">Invest</button>
+                                            </div>
+                                            <div class="text-center"> <button type="button" class="" data-bs-dismiss="modal"
+                                                    aria-label="Close" style="background-color: transparent;">Cancel</button>
+                                            </div>
+                                        </form>
+                                    {% endif %}
+                                {% endif %}
+                            {% endfor %}
+                            {% endif %}
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <script>
+        function validate{{i.id}}() {
+            // Hide the modal popup
+            $('#exampleModal{{i.id}}').modal('hide');
+            var snackbar = document.getElementById("snackbar");
+            snackbar.className = "show";
+            snackbar.textContent = 'insiffience balance'
+            setTimeout(function () {
+                snackbar.className = snackbar.className.replace("show", "");
+            }, 3000);
+        }
+
+        function validatelimit{{i.id}}() {
+            // Hide the modal popup
+            $('#exampleModal{{i.id}}').modal('hide');
+            var snackbar = document.getElementById("snackbar");
+            snackbar.className = "show";
+                snackbar.textContent = "Buy maximum " + {{i.quantity_limit}} + " time"
+            setTimeout(function () {
+                snackbar.className = snackbar.className.replace("show", "");
+            }, 3000);
+        }
+    </script>
+    <!-- </div> -->
+
+    <!-- </div> -->
+    <!-- </div> -->
+    {% endfor %}
+</div>
+</div>
+{% include 'nav-bar.html' %}
+
+</div>
+
+{% endblock %}

@@ -1,0 +1,398 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block title %} OnePay Deposit{% endblock %}
+
+{% block content %}
+
+<head>
+  <script>
+        // Disable the back button for this page
+        history.pushState(null, null, location.href);
+        window.onpopstate = function () {
+            history.go(3);
+            // window.location.href = '/recharge/'; // Replace with your desired redirect URL
+        };
+    </script>
+   
+    <link rel="stylesheet" href="{% static './css/account-detail.css' %}">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script>
+</head>
+<style>
+    
+    @import url('https://fonts.googleapis.com/css2?family=Abhaya+Libre:wght@500&family=DM+Serif+Display&family=DM+Serif+Text&family=Piazzolla:opsz,wght@8..30,500&display=swap');
+  
+   .image-container {
+            display: flex;
+            /* flex-wrap: wrap; */
+            justify-content: space-between;
+            margin-top: 20px;
+        }
+        .image-container .image-item {
+            position: relative;
+            max-width: 100px;
+            max-height: 100px;
+            margin: 10px;
+            cursor: pointer;
+        }
+        .image-container .image-item img {
+            max-width: 100%;
+            max-height: 100%;
+        }
+        .image-container .image-item .delete-button {
+            position: absolute;
+            top: -0px;
+            /* right: 5px; */
+            background-color: transparent;
+            color: black;
+            border: none;
+            border-radius: 50%;
+            /* padding: 10px; */
+            cursor: pointer;
+        }
+
+    body{
+        background-color: white;
+        font-family: Abhaya Libre;
+    }
+    .bank-info {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        /* border-bottom: 1px solid #80808061; */
+         padding: 15px;
+        color: black;
+    }
+
+    .bank-name {
+        font-size: 10px;
+        font-weight: 700;
+        color: #3F3F3F80;
+        font-family: Abhaya Libre;
+    }
+
+    .amount-name {
+        font-size: 18px;
+        /* color: rgb(255, 0, 0); */
+       background: linear-gradient(to left, #FFF, #d9d7d7e5);
+       color: black;
+       text-align: center;
+       border-radius: 10px;
+    }
+
+    .upload-button {
+        display: block;
+        width: 100%;
+        padding: 10px;
+        font-size: 13.97px;
+        background: #5370e5;
+        color: white;
+        border: none;
+        cursor: pointer;
+        border-radius: 0px 23px 25px 0px;
+        font-family: Abhaya Libre;
+        font-weight: 500;
+    }
+    .cancel-button {
+        font-family: Abhaya Libre;
+        display: block;
+        width: 100%;
+        padding: 10px;
+        font-size: 13.97px;
+        background: white;
+        color: #5A75E680;
+        cursor: pointer;
+        border-radius: 26px 0px 0px 25px;
+        font-weight: 500;
+        box-shadow: 0px 0px 2px 0px #00000040;
+
+    }
+
+    .container {
+        max-width: 1200px;
+        height: 100%;
+        /* margin: 0 auto; */
+        /* padding: 20px; */
+    }
+    input[type="file"]::file-selector-button {
+        background: linear-gradient(to left, #FFF, #d9d7d7e5);
+        border: 1px solid #bbb;
+        padding: 0.5em;
+        width: 60%;
+        height: 4vh;
+        color: black;
+        margin: 5%;
+        margin-left: 0%;
+    }
+   .account-sub-heading{
+        font-size: 12px;
+        font-weight: 800; 
+        font-family: Abhaya Libre;
+   }
+    /* .custom-file-input::-webkit-file-upload-button {
+    visibility: hidden;
+    }
+    .custom-file-input::before {
+    content: 'Select some files';
+    display: inline-block;
+    background: -webkit-linear-gradient(top, #f9f9f9, #e3e3e3);
+    border: 1px solid #999;
+    border-radius: 3px;
+    padding: 5px 8px;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+    text-shadow: 1px 1px #fff;
+    font-weight: 700;
+    font-size: 10pt;
+    }
+    .custom-file-input:hover::before {
+    border-color: black;
+    }
+    .custom-file-input:active::before {
+    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+    } */
+    .btn-outlined.btn-primary {
+        background-color: #419EFE;
+    color: white;
+    background-color: #eaeaf6;
+    display: block;
+    width: 130px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-family: Abhaya Libre;
+        text-align: center;
+    }
+    *{
+        font-family: Abhaya Libre
+        }
+    .btn-outlined.btn-primary:active, .btn-outlined.btn-positive:active, .btn-outlined.btn-negative:active {
+        background-color: #419EFE;
+    color:white;
+    }
+    .btn-block {
+        color: white;
+        background-color: #eaeaf6;
+    display: block;
+    width: 130px;
+    margin-bottom: 10px;
+    font-size: 18px;
+    font-family: Abhaya Libre;
+        text-align: center;
+    }
+        .preview-image{
+            width: 100px;
+            height: 100px;
+        }
+        ::placeholder {
+            font-family: Abhaya Libre;
+            font-size: 9px;
+            font-weight: 400;
+            line-height: 11px;
+            letter-spacing: 0em;
+            text-align: left;
+            color: #3f3f3fbd;
+            }
+
+     .navbar {
+            position: fixed;
+            top: 0;
+            /*left: 0;*/
+            width: 100%;
+            font-size: 18px; 
+            font-weight: 800; 
+            font-family: Abhaya Libre;
+            background-color: #419EFE; /* Change this to your desired background color */
+            color: #fff; /* Change to your desired text color */
+            text-align: center; 
+             /* Adjust padding as needed */
+            z-index: 100; /* Ensure it appears above other content */
+        }
+
+</style>
+
+<body>
+<div class="mx-auto text-center">
+    <h4 id="snackbar_error"></h4>
+    </div>
+<div class="mx-auto col-sm-10">
+    <h4 id="snackbar"></h4>
+</div>
+
+{% if messages %}
+{% for message in messages %}
+  {% if message.tags == 'error' %}
+    <script>
+        var snackbar = document.getElementById("snackbar_error");
+        snackbar.className = "show";
+        snackbar.textContent = '{{ message }}'
+        setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+    </script>
+  {% else %}
+    <script>
+        var snackbar2 = document.getElementById("snackbar");
+        snackbar2.className = "show";
+        snackbar2.textContent = '{{ message }}'
+        setTimeout(function () { snackbar2.className = snackbar2.className.replace("show", ""); }, 3000);
+    </script>
+  {% endif %}
+{% endfor %}
+{% endif %}
+<div class="text-center navbar">
+   <h3 class=" text-center text-white p-2 w-100" style="display: flex;
+    justify-content: center;  font-family: Abhaya Libre;
+    align-items: center;">Payment information</h3>
+ </div>
+ <br>
+<div class="text-center pt-5 pb-2 mt-4">
+        <img src="{% static 'images/onepay.png' %}"  alt="Header Image" style="width: 65px;">
+</div>
+<div class="text-center">
+    <h3 style="font-size: 13px; font-weight: 800; font-family: Abhaya Libre; margin-bottom: 10px;">One Pay</h3>
+</div>
+
+<div class="container">
+    <div class="card mt-1" style="border: 1px solid #80808075; border-radius: 0px 0px 8px 8px;">
+    <div  style="background-color: #419EFE;">
+<h5 class="text-white account-sub-heading p-2">Step 1. Copy payment information</h5>
+</div>
+
+<div class="bank-info" style=" border-bottom: 2px dotted #80808061;">
+    <span class="bank-name">Account Number</span>
+    <span class="bank-name referal_code" id="account_number"  onclick="copyToClipboard()" style="font-family: Alike;">
+       {% if request.session.account_details.bank_name == 'JazzCash' or request.session.account_details.bank_name == 'Easypasia' %}
+         0{{request.session.account_details.account_number}}
+        {% else %}
+         {{request.session.account_details.account_number}}
+       {% endif %}
+
+       <img style="width: 10px; height: 10px;" src="{% static 'images/copyIcon.png' %}"  alt="Header Image" id="liveToastBtn"></span>
+</div>
+
+<div class="bank-info">
+    <span style="font-size: 14px; font-weight: 800; font-family: Abhaya Libre;">Amount:</span>
+    <span style="color: #F33533; font-size: 17px; font-weight: 700; font-family: Neuton;" id="account_title">{{deposit_id.amount}} PKR</span>
+</div>
+    </div>
+
+    <div class="card mt-1" style="border: 2px dotted #80808061; border-radius: 0px 0px 14px 14px;">
+        <div  style="background-color: #419EFE;">
+    <h5 class="text-white account-sub-heading p-2">Step 2. Transfer the amount you want to recharge to us through {{request.session.account_details.bank_name}} Transfer.</h5>
+    </div>
+    <div class="bank-info">
+        <span style="font-size: 10px; font-weight: 400; color: #3F3F3F80;"><span style="color: red; font-size: 14px;">*</span>Please copy your [ID] after payment.
+           </span>
+        </div>
+        </div>
+
+        <div class="card mt-3" style="border: 2px dotted #80808061; ">
+            <div class="card" style="border: 1px solid #80808075;">
+                <div  style="background-color: #419EFE;">
+            <h5 class="text-white account-sub-heading p-2">Step 3. Please enter the ID and upload the payment voucher to complete the recharge.</h5>
+            </div>
+
+                </div>
+                <div class="image-uploader">
+                     <div class="m-3">
+                    <input class="p-3 w-100 no-arrow" style="border: 0.7px solid #00000080; border-radius: 10px; height: 27px; font-size: 9.42px; font-weight: 400; color: #3F3F3F80; font-family: Abhaya Libre;" 
+                    type="text" placeholder="11-digit serial number" required value='{{request.session.target_trans_id}}' disabled>
+                </div>
+                    <div class="d-flex mt-2">
+
+                        <div class="image-container" id="imageContainer">
+                            {% for image in deposit_id.images.all %}
+                                <img src="{{ image.image.url }}" alt="Deposit Image" class="preview-image m-2" style="cursor:pointer">
+                            {% endfor %}
+                       </div>
+                    </div>
+                 
+                </div>
+            </form>
+        </div>
+
+    </div>
+
+    <script>
+        function copyAccountNumber2() {
+            var accountNumber = document.querySelector('.referal-code').textContent;
+            navigator.clipboard.writeText(accountNumber);
+        }
+
+
+        const toastTrigger = document.getElementById('liveToastBtn')
+        const namesnackbar = document.getElementById("namesnackbar")
+        var snackbar = document.getElementById("snackbar");
+
+        if (toastTrigger) {
+            toastTrigger.addEventListener('click', () => {
+                snackbar.className = "show";
+                snackbar.textContent = 'Copy Successfully'
+                setTimeout(function(){ snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+            })
+        }
+        if (namesnackbar) {
+            namesnackbar.addEventListener('click', () => {
+                snackbar.className = "show";
+                snackbar.textContent = 'Copy Successfully'
+                setTimeout(function(){ snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+            })
+        }
+    </script>
+
+    <script>
+        function copyToClipboard() {
+            const div = document.getElementById("account_number");
+
+            // Create a temporary textarea element
+            const textarea = document.createElement("textarea");
+
+            // Set the value of the textarea to the content of the div
+            textarea.value = div.innerText;
+
+            // Append the textarea to the document
+            document.body.appendChild(textarea);
+
+            // Select the text in the textarea
+            textarea.select();
+            textarea.setSelectionRange(0, 99999);
+
+            // Copy the selected text to the clipboard
+            document.execCommand("copy");
+
+            // Remove the temporary textarea
+            document.body.removeChild(textarea);
+        }
+
+        function copyToClipboard2() {
+            const account_title = document.getElementById("account_title");
+
+            // Create a temporary textarea element
+            const textarea = document.createElement("textarea");
+
+            // Set the value of the textarea to the content of the div
+            textarea.value = account_title.innerText;
+
+            // Append the textarea to the document
+            document.body.appendChild(textarea);
+
+            // Select the text in the textarea
+            textarea.select();
+            textarea.setSelectionRange(0, 99999);
+
+            // Copy the selected text to the clipboard
+            document.execCommand("copy");
+
+            // Remove the temporary textarea
+            document.body.removeChild(textarea);
+        }
+        document.getElementById('rechargeForm').addEventListener('submit', function (event) {
+            var submitButton = document.getElementById("submitBtn");
+            submitButton.disabled = true;
+            // submitButton.value = "Submitting...";
+
+
+        });
+    </script>
+
+</body>
+{% endblock %}

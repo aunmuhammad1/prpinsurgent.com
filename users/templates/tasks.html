@@ -1,0 +1,638 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block title %} Task{% endblock %}
+
+{% block content %}
+<!-- {% comment %} <link rel="stylesheet" href="{% static './css/team.css' %}"> {% endcomment %} -->
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> -->
+
+<style>
+    * {
+        font-family: Montserrat;
+    }
+
+    .main-heading {
+        font-size: 16px;
+        font-weight: 500;
+        color: #000000;
+        font-family: Montserrat;
+    }
+
+    .header-img-container {
+        position: relative;
+        text-align: center;
+    }
+
+    .header-img-text-invite {
+        position: absolute;
+        top: 15%;
+        /* left: 15%;  */
+        color: #FFFFFF;
+        font-weight: 400;
+        font-size: 12px;
+        padding: 10px;
+    }
+
+    .header-img-text {
+        position: absolute;
+        top: 35%;
+        left: 10%;
+        font-weight: 600;
+        font-size: 20px;
+        padding: 10px;
+    }
+
+    .header-img-text2 {
+        position: absolute;
+        top: 63%;
+        left: 10%;
+
+        font-weight: 500;
+        font-size: 18px;
+        padding: 10px;
+    }
+
+    .cash-back,
+    .team-level,
+    .rewards-card {
+        width: 100%;
+    }
+
+    .style-line {
+        border: 0.7px solid #000000;
+        opacity: 0.5;
+    }
+
+    .team-sub-heading {
+        font-size: 12px;
+        font-weight: 500;
+        color: #000000;
+    }
+
+    .team-sub-heading-count {
+        font-size: 12px;
+        font-weight: 700;
+        color: #4D4D4D;
+    }
+
+    .team-card-sub-heading {
+        color: #000000;
+        font-size: 11px;
+        font-weight: 500;
+    }
+
+    .plan-card {
+        width: 175px;
+        height: 100px;
+        background-image: url('../../static/images/new/linear-bg.png');
+        /* Set the background image URL */
+        background-size: cover;
+        /* Scale the image to cover the entire div */
+        position: relative;
+        /* Needed for absolute positioning of text */
+    }
+
+    .text-overlay {
+        position: absolute;
+        top: 45%;
+        /* Adjust the top position as needed */
+        left: 35%;
+        /* Adjust the left position as needed */
+        transform: translate(-50%, -50%);
+        /* Center the text horizontally and vertically */
+        text-align: center;
+        /* Center text content */
+    }
+
+    .team-page-heading-white {
+        font-size: 13.46px;
+        font-weight: 600;
+        color: #FFFFFF;
+    }
+
+    .team-page-sub-heading-white {
+        font-size: 13.46px;
+        color: #353030;
+        font-weight: 600;
+        margin-top: 5px;
+    }
+    .header-img-container {
+        position: relative;
+        text-align: center;
+        padding: 0px 30px;
+    }
+    .bg-img {
+        background: linear-gradient(180deg, #2F979C 0%, #263445 100%);
+        border-radius: 20px;
+        padding: 10px 63px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .bg-img div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .bg-img div span {
+        font-size: 12px;
+        font-weight: 800;
+        color: #214579;
+    }
+
+    .main-heading {
+        font-family: Montserrat;
+        font-size: 20px;
+        font-weight: 700;
+        color: #214579;
+        padding: 0 60px;
+    }
+
+    .main-div {
+        width: 90%;
+        margin: 0 auto;
+        border-radius: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 20px;
+        align-items: center;
+        justify-content: center;
+        background-color: #F0F0F0;
+    }
+    
+    .divider {
+    width: 90%;
+    border: none;
+    border-top: 2px solid #214579;
+    margin: 20px 0;
+    }
+    .div-row{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .task-number{
+        display: flex;
+        align-items: center;
+    }
+    .task-number span{
+        color: #214579;
+    }
+</style>
+
+<div class="mx-auto text-center">
+    <h4 id="snackbar_error"></h4>
+</div>
+<div class="mx-auto col-sm-10">
+    <h4 id="snackbar"></h4>
+</div>
+<div class="mb-4">
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                <script>
+                    var snackbar = document.getElementById("snackbar_error");
+                    snackbar.className = "show";
+                    snackbar.textContent = '{{ message }}'
+                    setTimeout(function() {
+                        snackbar.className = snackbar.className.replace("show", "");
+                    }, 3000);
+                </script>
+            {% else %}
+                <script>
+                    var snackbar2 = document.getElementById("snackbar");
+                    snackbar2.className = "show";
+                    snackbar2.textContent = '{{ message }}'
+                    setTimeout(function() {
+                        snackbar2.className = snackbar2.className.replace("show", "");
+                    }, 3000);
+                </script>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+</div>
+<div class="text-center mt-3 mb-3">
+    <span class="main-heading">Task</span>
+</div>
+<div class="header-img-container">
+    <div class="bg-img"  style="background-image: url('../../static/images//user/mine/Rectangle\ 671.png'); background-size: cover; height: 116px; border-radius: 20px;">
+        <div>
+            <span>Total People</span>
+            <span>{{team_size}}</span>
+        </div>
+        <div>
+            <span>Account Balance</span>
+            <span>Rs {{request.user.balance}}</span>
+        </div>
+    </div>  
+</div>
+{% comment %} <div class="mt-3">
+    <img src="../../static/images/new/reward-bg.png" class="w-100">
+</div> {% endcomment %}
+
+<div class="main-div" >
+    <div class="rewards-card mx-2 p-3">
+        <div class="div-row">
+            <div class="task-number">
+                <img src="../../static/images/user/mine/Tasklist.png" >
+                <span style="font-size:15px; font-weight: 700; color: #000000;"> Task 1</span>
+            </div>
+            <div>
+                {% if active_refer > 5 %}
+                    {% if collect_task_one %}
+                        <div>
+                            <button class="px-3 p-1" disabled style="font-family: Gotham; font-size: 10px; font-weight: 700; color: #FFFFFF; border-radius: 15px; background-color: #214579;">
+                                Collected
+                            </button>
+                        </div>
+                    {% else %}
+                        <form method="POST" action="/task_completed/">
+                            {% csrf_token %}
+                            <input name="amount" value='100' type="number" required hidden>
+                            <input name="task_detail" value='Invite 5 friends to singup and invest' required hidden>
+                            <button class=" px-3 p-1"
+                                style="font-family: Gotham; font-size: 10px; font-weight: 700; color: white; border-radius: 15px; background-color: #F29D38; "
+                                type="submit">
+                                Received
+                            </button>
+                        </form>
+                    {% endif %}
+                {% else %}
+                    <button class=" px-3 p-1" disabled
+                        style="font-family: Gotham; font-size: 10px; font-weight: 700; color: #FFFFFF; border-radius: 15px; background-color: #80AAF4; "
+                        type="submit">
+                        Received
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+        <h5 class="mt-1" style="font-size: 12px; font-weight: 500; color: #3F3F3F;">Invite 15 friends to register get </h5>
+        <h5 style="font-size: 12px; font-weight: 500; color: #3F3F3F;">150 cash price.</h5>
+        <div class="d-flex justify-content-between mt-2">
+            <div class="withdraw-label w-50">
+                {% comment %} <div class="progress" style="height:7px">
+                    <div class="progress-bar" style="width:{{Level_1_count_task_1}}%;"></div>
+                  </div> {% endcomment %}
+                <span class="team-sub-heading-count">
+                    {% if Level_1_count > 14 %}
+                    15/15
+                    {% else %}
+                    {{Level_1_count}}/15
+                    {% endif %}
+                </span>
+            </div>
+            
+        </div>
+    
+    </div>
+
+    <hr class="divider">
+    
+    <div class="rewards-card mx-2 p-3 mt-4">
+        <div class="div-row">
+            <div class="task-number">
+                <img src="../../static/images/user/mine/Tasklist.png" >
+                <span style="font-size:15px; font-weight: 700; color: #000000;"> Task 2</span>
+            </div>
+            <div>
+                {% if active_refer > 5 %}
+                    {% if collect_task_two %}
+                        <div>
+                            <button class="px-3 p-1" disabled style="font-family: Gotham; font-size: 10px; font-weight: 700; color: #FFFFFF; border-radius: 15px; background-color: #214579;">
+                                Collected
+                            </button>
+                        </div>
+                    {% else %}
+                        <form method="POST" action="/task_completed/">
+                            {% csrf_token %}
+                            <input name="amount" value='300' type="number" required hidden>
+                            <input name="task_detail" value='Invite 6 friends to singup and invest' required hidden>
+                            <button class=" px-3 p-1"
+                                style="font-family: Gotham; font-size: 10px; font-weight: 700; color: white; border-radius: 15px; background-color: #F29D38; "
+                                type="submit">
+                                Received
+                            </button>
+                        </form>
+                    {% endif %}
+                {% else %}
+                    <button class=" px-3 p-1" disabled
+                        style="font-family: Gotham; font-size: 10px; font-weight: 700; color: #FFFFFF; border-radius: 15px; background-color: #80AAF4; "
+                        type="submit">
+                        Received
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+        <h5 class="mt-1" style="font-size: 13px; font-weight: 500; color: #3F3F3F;">Invite 6 friends to register and invest
+        </h5>
+        <h5 style="font-size: 13px; font-weight: 500; color: #3F3F3F;">get 300 cash price.</h5>
+        <div class="d-flex justify-content-between mt-2">
+                <div class="withdraw-label w-50">
+                    {% comment %} <div class="progress" style="height:7px">
+                        <div class="progress-bar" style="width:{{active_refer_task_2}}%;"></div>
+                      </div> {% endcomment %}
+                <span class="team-sub-heading-count">
+                    {% if active_refer > 5  %}
+                    6/6
+                    {% else %}
+                    {{active_refer}}/6
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <hr class="divider">
+    
+    <div class="rewards-card mx-2 p-3 mt-4">
+        <div class="div-row">
+            <div class="task-number">
+                <img src="../../static/images/user/mine/Tasklist.png" >
+                <span style="font-size:15px; font-weight: 700; color: #000000;"> Task 3</span>
+            </div>
+            <div>
+                {% if active_refer > 10 %}
+                    {% if collect_task_three %}
+                        <div>
+                            <button class="px-3 p-1" disabled style="font-family: Gotham; font-size: 10px; font-weight: 700; color: #FFFFFF; border-radius: 15px; background-color: #214579;">
+                                Collected
+                            </button>
+                        </div>
+                    {% else %}
+                        <form method="POST" action="/task_completed/">
+                            {% csrf_token %}
+                            <input name="amount" value='500' type="number" required hidden>
+                            <input name="task_detail" value='Invite 10 friends to singup and invest' required hidden>
+                            <button class=" px-3 p-1"
+                                style="font-family: Gotham; font-size: 10px; font-weight: 700; color: white; border-radius: 15px; background-color: #F29D38;"
+                                type="submit">
+                                Received
+                            </button>
+                        </form>
+                    {% endif %}
+                {% else %}
+                    <button class=" px-3 p-1" disabled
+                        style="font-family: Gotham; font-size: 10px; font-weight: 700; color: #FFFFFF; border-radius: 15px; background-color: #80AAF4;"
+                        type="submit">
+                        Received
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+        <h5 class="mt-1" style="font-size: 13px; font-weight: 500; color: #3F3F3F;">Invite 10 friends to register and invest
+        </h5>
+        <h5 style="font-size: 13px; font-weight: 500; color: #3F3F3F;">get 500 cash price.</h5>
+        <div class="d-flex justify-content-between mt-2">
+            <div class="withdraw-label w-50">
+                {% comment %} <div class="progress" style="height:7px">
+                    <div class="progress-bar" style="width:{{active_refer_task_3}}%;"></div>
+                    </div> {% endcomment %}
+                <span class="team-sub-heading-count">
+                    {% if active_refer > 15 %}
+                    10/10
+                    {% else %}
+                    {{active_refer}}/10
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+
+    
+
+    <hr class="divider">
+    
+    <div class="rewards-card mx-2 p-3 mt-4">
+        <div class="div-row">
+            <div class="task-number">
+                <img src="../../static/images/user/mine/Tasklist.png" >
+                <span style="font-size:15px; font-weight: 700; color: #000000;"> Task 4</span>
+            </div>
+            <div>
+                {% if active_refer > 25 %}
+                    {% if collect_task_four %}
+                        <div>
+                            <button class="px-3 p-1" disabled style="font-family: Gotham; font-size: 10px; font-weight: 700; color: #FFFFFF; border-radius: 15px; background-color: #214579;">
+                                Collected
+                            </button>
+                        </div>
+                    {% else %}
+                        <form method="POST" action="/task_completed/">
+                            {% csrf_token %}
+                            <input name="amount" value='1000' type="number" required hidden>
+                            <input name="task_detail" value='Invite 20 friends to singup and invest' required hidden>
+                            <button class=" px-3 p-1"
+                                style="font-family: Gotham; font-size: 10px; font-weight: 700; color: white; border-radius: 15px; background-color: #F29D38;"
+                                type="submit">
+                                Received
+                            </button>
+                        </form>
+                    {% endif %}
+                {% else %}
+                    <button class=" px-3 p-1" disabled
+                        style="font-family: Gotham; font-size: 10px; font-weight: 700; color: #FFFFFF; border-radius: 15px; background-color: #80AAF4;"
+                        type="submit">
+                        Received
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+        <h5 class="mt-1" style="font-size: 13px; font-weight: 500; color: #3F3F3F;">Invite 20 friends to register and invest
+        </h5>
+        <h5 style="font-size: 13px; font-weight: 500; color: #3F3F3F;">get 1000 cash price.</h5>
+        <div class="d-flex justify-content-between mt-2">
+            <div class="withdraw-label w-50">
+                {% comment %} <div class="progress" style="height:7px">
+                    <div class="progress-bar" style="width:{{active_refer_task_4}}%;"></div>
+                </div> {% endcomment %}
+                <span class="team-sub-heading-count">
+                    {% if active_refer > 25 %}
+                    20/20
+                    {% else %}
+                    {{active_refer}}/20
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+        
+
+    <hr class="divider">
+    
+    <div class="rewards-card mx-2 p-3 mt-4">
+        <div class="div-row">
+            <div class="task-number">
+                <img src="../../static/images/user/mine/Tasklist.png" >
+                <span style="font-size:15px; font-weight: 700; color: #000000;"> Task 5</span>
+            </div>
+            <div>
+                {% if active_refer > 45 %}
+                    {% if collect_task_five %}
+                        <div>
+                            <button class="px-3 p-1" disabled style="font-family: Gotham; font-size: 10px; font-weight: 700; color: #FFFFFF; border-radius: 15px; background-color: #214579;">
+                                Collected
+                            </button>
+                        </div>
+                    {% else %}
+                        <form method="POST" action="/task_completed/">
+                            {% csrf_token %}
+                            <input name="amount" value='5000' type="number" required hidden>
+                            <input name="task_detail" value='Invite 30 friends to singup and invest' required hidden>
+                            <button class=" px-3 p-1"
+                                style="font-family: Gotham; font-size: 10px; font-weight: 700; color: white; border-radius: 15px; background-color: #F29D38;"
+                                type="submit">
+                                Received
+                            </button>
+                        </form>
+                    {% endif %}
+                {% else %}
+                    <button class=" px-3 p-1" disabled
+                        style="font-family: Gotham; font-size: 10px; font-weight: 700; color: #FFFFFF; border-radius: 15px; background-color: #80AAF4;"
+                        type="submit">
+                        Received
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+        <h5 class="mt-1" style="font-size: 13px; font-weight: 500; color: #3F3F3F;">Invite 30 friends to register and invest
+        </h5>
+        <h5 style="font-size: 13px; font-weight: 500; color: #3F3F3F;">get 5000 cash price.</h5>
+        <div class="d-flex justify-content-between mt-2">
+            <div class="withdraw-label w-50">
+                {% comment %} <div class="progress" style="height:7px">
+                    <div class="progress-bar" style="width:{{active_refer_task_5}}%;"></div>
+                </div> {% endcomment %}
+                <span class="team-sub-heading-count">
+                    {% if active_refer > 45 %}
+                    30/30
+                    {% else %}
+                    {{active_refer}}/30
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+
+
+    <hr class="divider">
+    
+    <div class="rewards-card mx-2 p-3 mt-4">
+        <div class="div-row">
+            <div class="task-number">
+                <img src="../../static/images/user/mine/Tasklist.png" >
+                <span style="font-size:15px; font-weight: 700; color: #000000;"> Task 6</span>
+            </div>
+            <div>
+                {% if active_refer > 75 %}
+                    {% if collect_task_six %}
+                        <div>
+                            <button class="px-3 p-1" disabled style="font-family: Gotham; font-size: 10px; font-weight: 700; color: #FFFFFF; border-radius: 15px; background-color: #214579;">
+                                Collected
+                            </button>
+                        </div>
+                    {% else %}
+                        <form method="POST" action="/task_completed/">
+                            {% csrf_token %}
+                            <input name="amount" value='10000' type="number" required hidden>
+                            <input name="task_detail" value='Invite 50 friends to singup and invest' required hidden>
+                            <button class=" px-3 p-1"
+                                style="font-family: Gotham; font-size: 10px; font-weight: 700; color: white; border-radius: 15px; background-color: #F29D38;"
+                                type="submit">
+                                Received
+                            </button>
+                        </form>
+                    {% endif %}
+                {% else %}
+                    <button class=" px-3 p-1" disabled
+                        style="font-family: Gotham; font-size: 10px; font-weight: 700; color: #FFFFFF; border-radius: 15px; background-color: #80AAF4;"
+                        type="submit">
+                        Received
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+        <h5 class="mt-1" style="font-size: 13px; font-weight: 500; color: #3F3F3F;">Invite 50 friends to register and invest
+        </h5>
+        <h5 style="font-size: 13px; font-weight: 500; color: #3F3F3F;">get 10000 cash price.</h5>
+        <div class="d-flex justify-content-between mt-2">
+            <div class="withdraw-label w-50">
+                {% comment %} <div class="progress" style="height:7px">
+                    <div class="progress-bar" style="width:{{active_refer_task_6}}%;"></div>
+                </div> {% endcomment %}
+                <span class="team-sub-heading-count">
+                    {% if active_refer > 75 %}
+                    50/50
+                    {% else %}
+                    {{active_refer}}/50
+                    {% endif %}
+                </span>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<!-- Toast message  -->
+<div class="toast-container position-fixed top-0 end-0 p-3">
+    <div id="liveToast" class="toast bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+        <div class="toast-body  text-white">
+            Reference code copy.
+            <button type="button" class="btn-close" style="float: right;" data-bs-dismiss="toast"
+                aria-label="Close"></button>
+        </div>
+    </div>
+</div>
+</div>
+
+{% include 'nav-bar.html' %}
+<!--<div id="snackbar" >Copy Successfully</div>-->
+
+<script>
+    var snackbar = document.getElementById("snackbar");
+
+    function copyToClipboard() {
+        const div = document.getElementById("referal_code");
+        const textarea = document.createElement("textarea");
+        textarea.value = div.innerText;
+        // Append the textarea to the document
+        document.body.appendChild(textarea);
+        // Select the text in the textarea
+        textarea.select();
+        textarea.setSelectionRange(0, 99999);
+        // Copy the selected text to the clipboard
+        document.execCommand("copy");
+        // Remove the temporary textarea
+        document.body.removeChild(textarea);
+        snackbar.textContent = 'Copy Successfully';
+        snackbar.className = "show";
+        setTimeout(function() {
+            snackbar.className = snackbar.className.replace("show", "");
+        }, 3000);
+    }
+
+    function copyToClipboardLink() {
+        const div = document.getElementById("referal_link");
+        const textarea = document.createElement("textarea");
+        textarea.value = div.innerText;
+        // Append the textarea to the document
+        document.body.appendChild(textarea);
+        // Select the text in the textarea
+        textarea.select();
+        textarea.setSelectionRange(0, 99999);
+        // Copy the selected text to the clipboard
+        document.execCommand("copy");
+        // Remove the temporary textarea
+        document.body.removeChild(textarea);
+        snackbar.textContent = 'Copy Successfully';
+        snackbar.className = "show";
+        setTimeout(function() {
+            snackbar.className = snackbar.className.replace("show", "");
+        }, 3000);
+    }
+</script>
+
+{% endblock %}

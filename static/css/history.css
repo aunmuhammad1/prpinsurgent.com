@@ -1,0 +1,146 @@
+.header {
+    /* background-color: #f2f2f2; */
+    padding: 10px;
+    text-align: center;
+}
+
+.header h1 {
+    margin: 0;
+}
+
+.icon {
+    position: absolute;
+    top: 20px;
+    left: 40px;
+}
+
+.tabs {
+    display: flex;
+    justify-content: space-around;
+    /* background-color: #f2f2f2; */
+    color: #f2f2f2;
+    /* border: 2px solid #f2f2f2; */
+    padding: 10px 0px;
+    text-align: center;
+    margin:  0px 20px;
+}
+
+.tab {
+    cursor: pointer;
+    font-weight: bold;
+    padding: 5px 40px;
+    color: #4CAF50;
+}
+
+.tab:hover {
+    background-color: blue;
+    color: white;
+    border-radius: 25px;
+}
+
+.active {
+    /* text-decoration: underline; */
+    background-color: blue;
+    color: white;
+    /* padding: 0px 40px; */
+    border-radius: 25px;
+}
+
+.content {
+    padding: 20px;
+}
+
+/* CSS for the cards */
+.card {
+    background-color: #000000;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    margin-bottom: 8px;
+    padding: 15px;
+    border: 1px solid #ccc;
+
+}
+
+.card h2 {
+    margin: 0;
+}
+
+.card p {
+    margin: 5px 0;
+}
+
+/* CSS for responsive design */
+@media screen and (max-width: 600px) {
+    .tab {
+        margin-bottom: 5px;
+        padding: 5px 10px;
+    }
+
+    .content {
+        padding: 10px;
+    }
+}
+
+.card-heading {
+    font-size: 18px;
+    font-weight: bold;
+    margin-bottom: 10px;
+}
+
+.card-details {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 10px;
+}
+
+.card-date,
+.card-time,
+.card-amount {
+    font-size: 14px;
+}
+/* .pagination {
+  display: inline-block;
+  z-index: 999;
+}
+
+.pagination a {
+  color: #f4ae3f;
+  padding: 6px 10px;
+  text-decoration: none;
+  transition: background-color .3s;
+  border: 1px solid #ddd;
+  font-size: 16px;
+}
+
+.pagination a.active {
+  background-color: #4CAF50;
+  color: white;
+  border: 1px solid #4CAF50;
+}
+
+.pagination a:hover:not(.active) {background-color: #ddd;} */
+
+@media (max-width: 450px) {
+    .card-date,
+    .card-time,
+    .card-amount {
+        font-size: 12px;
+        color: black;
+    }
+
+    .card-amount {
+        float: right;
+    }
+    .title-font{
+        font-size: 18px;
+    }
+    .tab{
+        font-size: 12px;
+    }
+    .card-heading{
+        font-size: 15px;
+    }
+    .pg-btn{
+        font-size: 12px;
+    }
+}

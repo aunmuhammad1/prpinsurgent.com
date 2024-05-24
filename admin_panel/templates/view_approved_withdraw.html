@@ -1,0 +1,317 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+{% block title %} Withdraw Requests{% endblock %}
+
+{% block content %}
+<!-- ============================================================== -->
+<!-- left sidebar -->
+<!-- ============================================================== -->
+
+{% include "sidebar.html" %}
+<div class="mx-auto col-sm-10">
+    <h4 id="snackbar"></h4>
+</div>
+
+
+<div class="dashboard-wrapper">
+    <div class="dashboard-ecommerce">
+        <div class="container-fluid dashboard-content ">
+
+            <!-- ============================================================== -->
+            <!-- pageheader  -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="page-header">
+                        <div class="page-breadcrumb">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <a href="/admin_dashboard/" class="breadcrumb-link">Dashboard</a>
+                                    <span> >> withdraw Request</span>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <!-- recent Requests  -->
+                <!-- ============================================================== -->
+                <div class="col-12 container bg-white">
+                    <h3 class="card-header text-center mb-1 mt-3">Approved Withdraw Requests</h3>
+
+                    {% if messages %}
+                    {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                    <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+
+                    <div class="table-responsive">
+                        <table id="withdraw" class="table table-middle" style="width: 100%;">
+                            <thead>
+                                <tr align="center">
+                                    <th>#</th>
+                                    <th>user</th>
+                                    <th>Withdraw amount</th>
+                                    <th>Amount received</th>
+                                    <th>Request time</th>
+                                    <th>Status</th>
+                                    <th>Account Details</th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="table-group-divider">
+                                {% for i in Withdraw_request %}
+                                <tr align="center">
+                                    <td>{{forloop.counter}}</td>
+                                    <td>{{i.user}}</td>
+                                    <td>Rs {{i.withdraw_amount |floatformat:"1"}} /-</td>
+                                    <td>Rs {{i.amount_received |floatformat:"2"}} /-</td>
+                                    <td>{{i.withdraw_request_at}}</td>
+
+                                    <td>
+                                        {% if i.status == 'Pending' %}
+                                        <b class="badge text-bg-warning" style="font-size:14px">{{i.status}}..</b>
+                                        {% elif i.status == 'Withdraw Failed'%}
+                                        <span class="badge text-bg-danger" style="font-size:14px">Rejected</span>
+                                        {% else %}
+                                        <span class="badge text-bg-success" style="font-size:14px">Approved</span>
+                                        {% endif %}
+                                    </td>
+                                    <td>
+                                        <i class="fa-solid fa-eye" data-bs-toggle="modal"
+                                            data-bs-target="#accountDetail{{i.id}}"
+                                            style="color:rgb(110, 203, 23); cursor: pointer;"></i>
+                                        <i class="fa-solid fa-copy" onclick="copyToClipboard{{i.id}}()"></i>
+
+                                    </td>
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+            {% for i in Withdraw_request %}
+            <!-- withdraw reject Model -->
+            <div class="modal fade" id="Rejectwithdraw{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                Withdraw Confirmation
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="col-12">
+                            <h6 class="text-center">
+                                Are you sure, You want to reject this withdraw request
+                            </h6>
+                        </div>
+                        <form action="/admin_dashboard/withdraw/" method="post">
+                            {% csrf_token %}
+                            <input type="text" name="action" hidden value="reject">
+                            <input type='number' name="withdraw_id" value="{{i.id}}" hidden>
+
+                            <table class="modal-body col-12 mb-3">
+                                <tr>
+                                    <td align="center">
+                                        <input type="submit" class="btn btn-outline-danger text-center"
+                                            value="Reject withdraw Request">
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </form>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- withdraw Confirm Model -->
+            <div class="modal fade" id="Confirmwithdraw{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                withdraw Confirmation
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="col-12">
+                            <h6 class="text-center">
+                                Are you sure, You want to confirm this withdraw request
+                            </h6>
+                        </div>
+                        <form action="/admin_dashboard/withdraw/" method="post">
+                            {% csrf_token %}
+                            <input type="text" name="action" hidden value="approved">
+                            <input type='number' name="withdraw_id" value="{{i.id}}" hidden>
+                            <table class="modal-body col-12 mb-3">
+                                <tr>
+                                    <td align="center">
+                                        <input type="submit" class="btn btn-outline-success text-center"
+                                            value="Approved withdraw Request">
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </form>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- withdraw Review Model -->
+            <div class="modal fade" id="Review{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                Review Confirmation
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="col-12">
+                            <h6 class="text-center">
+                                Are you sure, You want to change your decision, confirm this withdraw request
+                            </h6>
+                        </div>
+                        <form action="/admin_dashboard/withdraw/" method="post">
+                            {% csrf_token %}
+                            <input type="text" name="action" hidden value="approved">
+                            <input type='number' name="withdraw_id" value="{{i.id}}" hidden>
+                            <table class="modal-body col-12 mb-3">
+                                <tr>
+                                    <td align="center">
+                                        <input type="submit" class="btn btn-outline-success text-center"
+                                            value="Approved Withdraw Request">
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- view user account Model -->
+            <div class="modal fade" id="accountDetail{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                User Bank Account Detail
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <div class="table-responsive">
+                                <table class="table width:100%">
+                                    <tbody>
+
+                                        <tr>
+                                            <th class="col-6" style="color:green">
+                                                Account Title
+                                            </th>
+                                            <td class="col-6" style="color:green">
+                                                {{i.user_account.account_title}}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="col-6" style="color:green">
+                                                Account number
+                                            </th>
+                                            <td>
+                                                {% if i.user_account.bank_id.bank_name == 'JazaCash' or i.user_account.bank_id.bank_name == 'Easypasia' %}
+                                                <span id="referal_code{{i.id}}">0{{i.user_account.account_number}}</span>   
+                                                {% else %}
+                                                <span id="referal_code{{i.id}}">{{i.user_account.account_number}}</span>
+                                                {% endif %}
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <th class="col-6" style="color:green">
+                                                Bank
+                                            </th>
+                                            <td>{{i.user_account.bank_id.bank_name}}</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <script>
+                var snackbar = document.getElementById("snackbar");
+            
+                function copyToClipboard{{i.id}}() {
+                    const div = document.getElementById("referal_code{{i.id}}");
+                    console.log('div == ', div)
+                    const textarea = document.createElement("textarea");
+                    textarea.value = div.innerText;
+                    // Append the textarea to the document
+                    document.body.appendChild(textarea);
+                    // Select the text in the textarea
+                    textarea.select();
+                    textarea.setSelectionRange(0, 99999);
+                    // Copy the selected text to the clipboard
+                    document.execCommand("copy");
+                    // Remove the temporary textarea
+                    document.body.removeChild(textarea);
+                    snackbar.textContent = 'Account Number Copy';
+                    snackbar.className = "show";
+                    setTimeout(function() {
+                        snackbar.className = snackbar.className.replace("show", "");
+                    }, 3000);
+                }
+            </script>
+            {% endfor %}
+
+        </div>
+    </div>
+</div>
+<script>
+    const targetDiv = document.getElementById("withdraw_div");
+    const targetSubDiv = document.getElementById("withdraw_div_2");
+    const targetnav = document.getElementById("withdraw_nav");
+    const targetSubnav = document.getElementById("withdraw_nav_2");
+    targetSubnav.classList.add("active");
+    targetnav.classList.add("active");
+    targetSubDiv.classList.add("active");
+    targetDiv.classList.add("active");
+</script>
+{% endblock %}

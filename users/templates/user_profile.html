@@ -1,0 +1,398 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block title %} Profile{% endblock %}
+
+{% block content %}
+
+<head>
+    <style>
+        .input-style {
+            padding: 15px;
+            width: 100%;
+            height: 40px;
+            font-family: Tienne;
+            font-size: 14px;
+            font-weight: 400;
+            border: 1px solid #214579; 
+            color: black;
+            border-radius: 50px;
+            background-color: #F0F0F0;
+        }
+
+         label {
+            font-family: Tienne;
+font-size: 11px;
+font-weight: 700;
+color: #000000B2;
+
+        }
+
+        .register-button {
+            display: block;
+    background: #214579;
+    /* box-shadow: 0px 0px 5px 0px #3B3B3B8F; */
+    color: white;
+    border: none;
+    cursor: pointer;
+    border-radius: 8px;
+    height: 48px;
+    font-family: Tienne;
+font-size: 14px;
+font-weight: 700;
+        }
+
+        /* Style for the password container */
+        .password-container {
+            display: flex;
+            align-items: center;
+            position: relative;
+        }
+
+        /* Style for the custom icon */
+        .toggle-password img {
+            position: absolute;
+            right: 10px;
+            /* Adjust the position as needed */
+            cursor: pointer;
+            top: 11px;
+        }
+        .header-heading{
+    font-family: Tienne;
+font-size: 18px;
+font-weight: 400;
+text-align: center;
+color: black;
+  }
+  
+  .tabs {
+        background: linear-gradient(180deg, #9baec7 0%, #214579 100%);
+        display: flex;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        border-radius: 11px;
+    }
+
+    .tab {
+        flex: 1;
+        text-align: center;
+        cursor: pointer;
+        font-family: Tienne;
+font-size: 10px;
+font-weight: 700;
+color: #FFFFFF96;
+    }
+
+    .tab:hover  {
+        background: linear-gradient(180deg, #6c8cb5 0%, #214579 100%);
+        font-family: Tienne;
+font-size: 10px;
+font-weight: 700;
+color: white;
+        border-radius: 10px;
+    }
+
+    .tab.active {
+        background: linear-gradient(180deg, #8499b5 0%, #214579 100%);
+        font-family: Tienne;
+font-size: 10px;
+font-weight: 700;
+color: white;
+        border-radius: 10px;
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+    ::-ms-input-placeholder { 
+            font-family: Tienne;
+font-size: 10px;
+font-weight: 400;
+  color: #00000040;
+}
+
+::placeholder {
+    font-family: Tienne;
+font-size: 10px;
+font-weight: 400;
+color: #00000040;
+}
+    </style>
+    <link rel="stylesheet" href="{% static './css/profile-setting.css' %}">
+</head>
+
+<body>
+    <div class="mx-auto">
+        <h4 id="snackbar_error"></h4>
+    </div>
+    <div class="mx-auto col-sm-10">
+        <h4 id="snackbar"></h4>
+    </div>
+    <div class="card" style="background: transparent;">
+        <form method="POST" action="/user_profile/">
+            {% csrf_token %}
+            {% if messages %}
+            {% for message in messages %}
+            {% if message.tags == 'error' %}
+            <script>
+                var snackbar = document.getElementById("snackbar_error");
+                snackbar.className = "show";
+                snackbar.textContent = '{{ message }}'
+                setTimeout(function() {
+                    snackbar.className = snackbar.className.replace("show", "");
+                }, 3000);
+            </script>
+            {% else %}
+            <script>
+                var snackbar2 = document.getElementById("snackbar");
+                snackbar2.className = "show";
+                snackbar2.textContent = '{{ message }}'
+                setTimeout(function() {
+                    snackbar2.className = snackbar2.className.replace("show", "");
+                }, 3000);
+            </script>
+            {% endif %}
+            {% endfor %}
+            {% endif %}
+            <!-- <div>
+                <div style="position: absolute; left: 24%; top: 6%;">
+                    <span style="font-family: DM Serif Text;
+                    font-size: 27px;
+                    font-weight: 400;
+                    color: rgba(255, 255, 255, 1);
+
+                    ">Change Password</span>
+                </div>
+                <img src="../../static/images/app/header-bg.png" class="w-100">
+            </div> -->
+
+        </form>
+        <div class="header-heading m-3">
+            Change Password
+            </div>
+        <div class="mx-3">
+        <ul class="tabs  w-100 p-0">
+            <li class="tab p-3 align-self-center active" onclick="showTab('login')">Login Password</li>
+            <li class="tab p-3 align-self-center" onclick="showTab('transaction')">Transaction Password</li>
+        </ul>
+    </div>
+        <div id="loginTab" class="tab-content active mx-4">
+            <form method="POST" action="/user_profile/" id="changePasswordForm">
+                {% csrf_token %}
+
+                <div class="row justify-content-between">
+                    <div class="col-lg-6 col-12 p-2">
+                        <label>Login Password</label>
+                        <div class="password-container">
+                            <input class="col-12 input-style" type="password" placeholder="Please enter the withdrawal Account No"
+                                required name="current_password" id="loginPasswordField">
+                            <span class="toggle-password align-self-baseline"
+                                onclick="togglePasswordVisibility(this, 'password-icon1', 'loginPasswordField')">
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-6 col-12 p-2">
+                        <label>New Password</label>
+                        <div class="password-container">
+                            <input class="col-12 input-style" type="password" placeholder="Please enter the withdrawal Account No" required
+                                name="new_password" id="passwordField" minlength="8">
+                            <span class="toggle-password align-self-baseline"
+                                onclick="togglePasswordVisibility(this, 'password-icon2', 'passwordField')">
+                               
+                                    
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-12 p-2 ">
+                        <label>Confirm Password</label>
+                        <div class="password-container">
+                            <input class="col-12 input-style" type="password" name="confirm_password" required
+                                placeholder="Please enter the withdrawal Account No" id="Confirm_passwordField" minlength="8">
+                            <span class="toggle-password align-self-baseline"
+                                onclick="togglePasswordVisibility(this, 'password-icon3', 'Confirm_passwordField')">
+                                
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class=" mt-5 d-flex justify-content-center">
+                    <button class="register-button px-5 p-1 " type="submit" id="psubmitButton">Confirm</button>
+
+                </div>
+            </form>
+        </div>
+        <div id="transactionTab" class="tab-content mx-4">
+             <form method="POST" action="/withdraw_password/" id="changePinForm">
+                {% csrf_token %}
+                <div class="row justify-content-between">
+                    <div class="col-lg-6 col-12 p-2">
+                        <label>Transaction Password</label>
+                        <div class="password-container">
+                            <input class="col-12 input-style no-arrow" type="number" maxLength="4" minlength="4"
+                                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                placeholder="Enter transaction password" required name="transaction_pin"
+                                id="transaction_pin">
+                            <span class="toggle-password align-self-baseline"
+                                onclick="togglePasswordVisibility(this, 'password-icon3', 'transaction_pin')">
+                                <img src="../../static/images/headphone/open-eye.png" id="password-icon3"
+                                    style="width: 21px;">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-12 p-2 ">
+                        <label>Confirm Transaction Password</label>
+                        <div class="password-container">
+                            <input class="col-12 input-style no-arrow" type="number"
+                                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                placeholder="Enter confirm transaction password" required name="Ctransaction_pin"
+                                id="ctransaction_pin" minlength="4" maxlength="4">
+                            <span class="toggle-password align-self-baseline"
+                                onclick="togglePasswordVisibility(this, 'password-icon2', 'ctransaction_pin')">
+                                <img src="../../static/images/headphone/open-eye.png" id="password-icon2"
+                                    style="width: 21px;">
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-lg-6 col-12 p-2">
+                        <label>Login Password</label>
+                        <div class="password-container">
+                            <input class="col-12 input-style" type="password" placeholder="Enter login password "
+                                required name="current_password" id="current_password">
+                            <span class="toggle-password align-self-baseline"
+                                onclick="togglePasswordVisibility(this, 'password-icon3', 'current_password')">
+                                <img src="../../static/images/headphone/open-eye.png" id="password-icon3"
+                                    style="width: 21px;">
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-center mt-5">
+
+                    <button type="submit" id="tsubmitButton" class="register-button px-5 p-1 ">
+                        Confirm
+                    </button>
+                </div>
+            </form>
+        </div>
+    </div>
+ <script>
+        var snackbar = document.getElementById("snackbar_error");
+        var transaction_pin = document.getElementById("transaction_pin");
+        var ctransaction_pin = document.getElementById("ctransaction_pin");
+        var pinsubmitButton = document.getElementById("tsubmitButton");
+        document.getElementById('changePinForm').addEventListener('submit', function(event) {
+            var minLength_transaction_pin = parseInt(transaction_pin.getAttribute('minlength'));
+            var transactionValue = transaction_pin.value.trim();
+            var minLength_Confirm_pin = parseInt(ctransaction_pin.getAttribute('minlength'));
+            var Confirm_pinValue = ctransaction_pin.value.trim();
+            if (transactionValue.length < minLength_transaction_pin) {
+                event.preventDefault(); // Prevent form submission
+                snackbar.className = "show";
+                snackbar.textContent = 'Pin must be at least' + minLength_transaction_pin + ' digit long.';
+                setTimeout(function() {
+                    snackbar.className = snackbar.className.replace("show", "");
+                }, 3000);
+            }
+            if (Confirm_pinValue.length < minLength_Confirm_pin) {
+                event.preventDefault(); // Prevent form submission
+                snackbar.className = "show";
+                snackbar.textContent = 'Transaction pin must be at least ' + minLength_Confirm_pin +
+                    ' characters long.';
+                setTimeout(function() {
+                    snackbar.className = snackbar.className.replace("show", "");
+                }, 3000);
+            } else if (Confirm_pinValue != transactionValue) {
+                event.preventDefault();
+                snackbar.className = "show";
+                snackbar.textContent = 'transaction and confirm transaction pin must be same';
+                setTimeout(function() {
+                    snackbar.className = snackbar.className.replace("show", "");
+                }, 3000);
+            }
+            // if (phoneValue[0] === '0') {
+            //     event.preventDefault(); // Prevent form submission
+            //     error_phonelenght.style.display = 'block';
+            //     error_phonelenght.textContent = 'Phone number first number cannot be 0';
+            // }
+        });
+
+    </script>
+
+    <script>
+        var passwordField = document.getElementById('passwordField');
+        var Confirm_passwordField = document.getElementById('Confirm_passwordField');
+        var passwordsubmitButton = document.getElementById("psubmitButton");
+        var snackbar = document.getElementById("snackbar_error");
+
+        document.getElementById('changePasswordForm').addEventListener('submit', function(event) {
+            var minLength_password = parseInt(passwordField.getAttribute('minlength'));
+            var passwordValue = passwordField.value.trim();
+            var minLength_Confirm_password = parseInt(Confirm_passwordField.getAttribute('minlength'));
+            var Confirm_passwordValue = Confirm_passwordField.value.trim();
+            if (passwordValue.length < minLength_password) {
+                event.preventDefault(); // Prevent form submission
+                snackbar.className = "show";
+                snackbar.textContent = 'Password must be at least ' + minLength_password + ' characters long.';
+                setTimeout(function() {
+                    snackbar.className = snackbar.className.replace("show", "");
+                }, 3000);
+            }
+            if (Confirm_passwordValue.length < minLength_Confirm_password) {
+                event.preventDefault(); // Prevent form submission
+                snackbar.className = "show";
+                snackbar.textContent = 'Password must be at least ' + minLength_confirmPassword +
+                    ' characters long.';
+                setTimeout(function() {
+                    snackbar.className = snackbar.className.replace("show", "");
+                }, 3000);
+            } else if (Confirm_passwordValue != passwordValue) {
+                event.preventDefault();
+                snackbar.className = "show";
+                snackbar.textContent = 'Password and confirm Password must be same';
+                setTimeout(function() {
+                    snackbar.className = snackbar.className.replace("show", "");
+                }, 3000);
+            }
+            // if (phoneValue[0] === '0') {
+            //     event.preventDefault(); // Prevent form submission
+            //     error_phonelenght.style.display = 'block';
+            //     error_phonelenght.textContent = 'Phone number first number cannot be 0';
+            // }
+        });
+    </script>
+    <script>
+        function togglePasswordVisibility(button, iconId, inputId) {
+            const passwordInput = document.getElementById(inputId); // Get the input field
+            const icon = document.getElementById(iconId); // Get the icon image
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text'; // Show the password
+                icon.src = '../../static/images/new/close-eye.png'; // Change to the hide password image
+            } else {
+                passwordInput.type = 'password'; // Hide the password
+                icon.src = '../../static/images/new/open-eye.png'; // Change to the show password image
+            }
+        }
+    </script>
+<script>
+    function showTab(tabName) {
+        // Hide all tabs and remove the 'active' class
+        document.querySelectorAll('.tab-content').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        document.querySelectorAll('.tab').forEach(tab => {
+            tab.classList.remove('active');
+        });
+        // Show the selected tab and add the 'active' class
+        document.getElementById(tabName + 'Tab').classList.add('active');
+        event.currentTarget.classList.add('active');
+    }
+</script>
+    {% include 'nav-bar.html' %}
+</body>
+{% endblock %}

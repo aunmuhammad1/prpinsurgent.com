@@ -1,0 +1,717 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block title %} Team{% endblock %}
+
+{% block content %}
+<!-- {% comment %} <link rel="stylesheet" href="{% static './css/team.css' %}"> {% endcomment %} -->
+<!-- <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.6.4/jquery.min.js"></script> -->
+<style>
+    * {
+        font-family: Montserrat;
+    }
+body{
+    font-family: Montserrat;
+}
+    .main-heading {
+        font-family: Montserrat;
+        font-size: 20px;
+        font-weight: 700;
+        color: #214579;
+        padding: 0 60px;
+    }
+
+    .header-img-container {
+        position: relative;
+        text-align: center;
+    }
+
+    .header-img-text-invite {
+
+        font-weight: 400;
+        font-size: 12px;
+        padding: 10px;
+    }
+
+    .header-img-text {
+        font-weight: 600;
+        font-size: 20px;
+        padding: 10px;
+    }
+
+    .header-img-text2 {
+        font-weight: 500;
+        font-size: 18px;
+        padding: 10px;
+    }
+
+    .cash-back,
+    .team-level,
+    .rewards-card {
+        width: 100%;
+    }
+
+    .style-line {
+        border: 0.7px solid #000000;
+        opacity: 0.5;
+    }
+
+    .team-sub-heading {
+        font-size: 12px;
+        font-weight: 500;
+        color: #000000;
+    }
+
+    .team-sub-heading-count {
+        font-size: 11px;
+        font-weight: 500;
+        color: #546370;
+    }
+
+    .team-card-sub-heading {
+        color: #000000;
+        font-size: 11px;
+        font-weight: 500;
+    }
+
+    .plan-card {
+        width: 175px;
+        height: 100px;
+        background: linear-gradient(180deg, #2F979C 0%, #263445 100%);
+align-items: center;
+display: flex;
+box-shadow: 0px 0px 8px 0px #00000040;
+border-radius: 10px;
+    }
+
+    .text-overlay {
+        position: absolute;
+        top: 45%;
+        /* Adjust the top position as needed */
+        left: 35%;
+        /* Adjust the left position as needed */
+        transform: translate(-50%, -50%);
+        /* Center the text horizontally and vertically */
+        text-align: center;
+        /* Center text content */
+    }
+
+    .team-page-heading-white {
+        font-family: Montserrat;
+font-size: 13.5px;
+font-weight: 600;
+        color: #FFFFFF;
+    }
+
+    .team-page-sub-heading-white {
+        font-family: Montserrat;
+        font-size: 13.5px;
+        font-weight: 600;
+        color: #FFFFFF;
+    }
+
+    .header-img-container {
+        position: relative;
+        text-align: center;
+        padding: 0px 30px;
+    }
+
+    .bg-img {
+        background: linear-gradient(180deg, #2F979C 0%, #263445 100%);
+        border-radius: 20px;
+        padding: 10px 63px;
+        color: white;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .bg-img div {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .bg-img div span {
+        font-size: 12px;
+        font-weight: 800;
+        color: #214579;
+    }
+
+    .divider {
+        border: 2px solid #214579;
+        opacity: 0.5;
+        width: 100%;
+    }
+
+    .referal-main {
+        padding: 20px;
+        border-radius: 20px;
+        border: 2px solid #214579;
+        margin: 10px 20px;
+    }
+
+    .referal-heading {
+        font-size: 20px;
+        font-weight: 700;
+        color: #214579;
+        text-align: center;
+    }
+
+    .referal-code {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px 0px;
+    }
+
+    .referal-code-text {
+        font-size: 20px;
+        font-weight: 700;
+        color: #214579;
+    }
+
+    .referal-code-button {
+        background: #214579;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .referal-linke {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        padding: 10px 0px;
+        box-shadow: none;
+    }
+
+    .referal-linke-text {
+        font-size: 12px;
+        font-weight: 500;
+        color: #214579;
+    }
+
+    .referal-linke-button {
+        background: #214579;
+        color: white;
+        border: none;
+        padding: 5px 10px;
+        border-radius: 10px;
+        font-size: 12px;
+        font-weight: 700;
+    }
+
+    .main-div {
+        width: 90%;
+        margin: 0 auto;
+        border-radius: 20px;
+        display: flex;
+        flex-wrap: wrap;
+        margin-top: 20px;
+        align-items: center;
+        justify-content: center;
+        background-color: #F0F0F0;
+    }
+
+    .div-row{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    .task-number{
+        display: flex;
+        align-items: center;
+    }
+    .task-number span{
+        color: #214579;
+    }
+    
+
+</style>
+
+<div class="mx-auto text-center">
+    <h4 id="snackbar_error"></h4>
+</div>
+<div class="mx-auto col-sm-10">
+    <h4 id="snackbar"></h4>
+</div>
+<div class="mb-4">
+    {% if messages %}
+        {% for message in messages %}
+            {% if message.tags == 'error' %}
+                <script>
+                    var snackbar = document.getElementById("snackbar_error");
+                    snackbar.className = "show";
+                    snackbar.textContent = '{{ message }}'
+                    setTimeout(function() {
+                        snackbar.className = snackbar.className.replace("show", "");
+                    }, 3000);
+                </script>
+            {% else %}
+                <script>
+                    var snackbar2 = document.getElementById("snackbar");
+                    snackbar2.className = "show";
+                    snackbar2.textContent = '{{ message }}'
+                    setTimeout(function() {
+                        snackbar2.className = snackbar2.className.replace("show", "");
+                    }, 3000);
+                </script>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <div class="text-center mt-3 p-1">
+        <span href="/" class="main-heading">Team</span>
+    </div>
+
+    <div class="header-img-container">
+        <div class="bg-img"  style="background-image: url('../../static/images//user/mine/Rectangle\ 671.png'); background-size: cover; height: 116px; border-radius: 20px;">
+            <div>
+                <span>Total People</span>
+                <span>{{team_size}}</span>
+            </div>
+            <div>
+                <span>Account Balance</span>
+                <span>Rs {{request.user.balance}}</span>
+            </div>
+        </div>  
+    </div>
+    <div class="refral-container">
+        <div class="referal-main">
+            <h1 class="referal-heading">Your invitation code</h1>
+            <div class="referal-code">
+                <h1 class="referal-code-text">{{request.user.refer_code}}</h1>
+                <button class="referal-code-button" onclick="copyToClipboard()">Copy</button>
+            </div>
+            <hr class="divider">
+            <div class="referal-linke">
+                <h5 class="referal-linke-text">{{domainname}}/signup/?ref&code={{request.user.refer_code}}</h5>
+                <button class="referal-linke-button" onclick="copyToClipboardLink()">Copy</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- <div class="d-flex justify-content-evenly p-0 m-0">
+        <div class="plan-card">
+            <div class="w-100 text-center">
+                <h5 class="team-page-heading-white">{{team_size}}</h5>
+                <h5 class="team-page-sub-heading-white mt-1">Total People</h5>
+            </div>
+        </div>
+        <div class=" plan-card ">
+            <div class="w-100 text-center">
+                <h5 class="team-page-heading-white">
+                
+                    Rs {{total_refer_invest}}
+                    
+                </h5>
+                <h5 class="team-page-sub-heading-white mt-1">Total Invest</h5>
+            </div>
+        </div>
+    </div> -->
+    <!-- <div class="header-img-container m-2 mt-4">
+        <div class="header-img-text-invite row m-0 p-0 w-100">
+            <span style="font-size: 12px; font-weight: 400; color: #2C6E78;">                   
+                 <img src="../../static/images/Future bike/invite.png" style="width: 15px;">Your Invitation Code </span>
+        </div>
+        <div class="header-img-text ps-5 row m-0 p-0 w-100  justify-content-center">
+            
+            <div class="col-6 p-0 pt-2">
+                <h5 class="w-100 p-2 col-8" id="referal_code"
+                    style="font-family: Montserrat; font-size: 12px; font-weight: 500; color: white; background-color: #2C6E78; border-radius: 5px;  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; letter-spacing: 5px;">
+                    {{request.user.refer_code}}
+                </h5>
+            </div>
+            <div class="col-2">
+                <span class="p-1 px-3" onclick="copyToClipboard()"
+                    style="border-radius: 25px; font-weight: 500; font-size: 9.5px;">
+                    <img src="../../static/images/Future bike/copy.png" style="width: 15px;"> </span>
+            </div>
+        </div>
+        <div class="header-img-text2 ps-5 row m-0 p-0 w-100 justify-content-center">
+            
+            <div class="col-6 p-0 pt-2">
+                <h5 class="w-100 p-2 px-2" id="referal_link"
+                    style="font-size: 12px; font-weight: 500; color: white; background-color: #2C6E78; border-radius: 5px;  white-space: nowrap; overflow: hidden; text-overflow: ellipsis; font-family: Montserrat;">
+                    https://{{domainname}}/signup/?ref&code={{request.user.refer_code}}
+                </h5>
+            </div>
+            <div class="col-2 pt-1">
+                <span class="p-1 px-3" style="border-radius: 25px; font-weight: 500; font-size: 9.5px;"
+                    onclick="copyToClipboardLink()">
+                    <img src="../../static/images/Future bike/copy.png" style="width: 15px;">
+                </span>
+            </div>
+        </div> -->
+    </div>
+
+    <!-- <div class="cash-back mx-2 p-3 mt-5">
+    <div style="margin-top: -25px;">
+        <span class="bg-black p-1 rounded-2" style="font-size: 9.5px; font-weight: 700; color: #FFFFFF; margin-top: -20px;"><i class="fa-solid fa-check-to-slot text-white"></i>  Cash Back</span>
+    </div>
+            <h5 class="mt-2" style="font-size: 11.04px; font-weight: 500; color: #363535;">Invite friends to invest and receive 25%</h5>
+            <h5 style="font-size: 11.04px; font-weight: 500; color: #363535;">cashback gift on first level.</h5>
+            <div class="d-flex justify-content-between">
+                <div class="withdraw-label">
+                    <span class="team-sub-heading">Total people</span>
+                </div>
+                <div>
+                    <span class="team-rs-sub-heading">{{active_refer}}</span>
+                </div>
+            </div>
+
+            <div class="underline"></div>
+
+            <div class="d-flex justify-content-between">
+                <div class="recieve-label">
+                    <span class="team-sub-heading">Total Cashback</span>
+                </div>
+                <div>
+                    <span class="team-rs-sub-heading">RS {{total_cashback |floatformat:"2"}}</span>
+                </div>
+            </div>
+
+</div> -->
+<div class="main-div" >
+    <div class="rewards-card mx-2 p-3">
+        <div class="div-row">
+            <div class="task-number">
+                <img src="../../static/images/user/mine/Movie Ticket.png" >
+                <span style="font-size: 15px; font-weight: 700; color: #214579;">Cash Rebate</span>
+            </div>
+            <div>
+                <span style="font-size: 15px; font-weight: 700; color: #F29D38;">15%</span>
+            </div>  
+        </div>
+        <div class="d-flex justify-content-between mt-2">
+            <h5 style="font-size: 12px; font-weight: 500; color: #363535;">Members</h5>
+            <span style="font-size: 12px; font-weight: 500; color: #363535;">{{active_refer}}</span>
+        </div>
+        <div class="d-flex justify-content-between mt-2">
+            <h5 style="font-size: 12px; font-weight: 500; color: #363535;">Invest</h5>
+            <span style="font-size: 12px; font-weight: 500; color: #363535;">Rs. 15000</span>
+        </div>
+        <div class="d-flex justify-content-between mt-2">
+            <h5 style="font-size: 12px; font-weight: 500; color: #363535;">Rebate</h5>            
+            <div>
+                {% if active_refer > 5 %}
+                    {% if collect_task_one %}
+                        <div>
+                            <button class="px-3 p-1" disabled style="font-family: Gotham; font-size: 10px; font-weight: 700; color: #FFFFFF; border-radius: 15px; background-color: #214579;">
+                                Collected
+                            </button>
+                        </div>
+                    {% else %}
+                        <form method="POST" action="/task_completed/">
+                            {% csrf_token %}
+                            <input name="amount" value='100' type="number" required hidden>
+                            <input name="task_detail" value='Invite 5 friends to singup and invest' required hidden>
+                            <button class=" px-3 p-1"
+                                style="font-family: Gotham; font-size: 10px; font-weight: 700; color: white; border-radius: 15px; background-color: #F29D38; "
+                                type="submit">
+                                Received
+                            </button>
+                        </form>
+                    {% endif %}
+                {% else %}
+                    <button class=" px-3 p-1" disabled
+                        style="font-family: Gotham; font-size: 10px; font-weight: 700; color: #FFFFFF; border-radius: 15px; background-color: #80AAF4; "
+                        type="submit">
+                        Received
+                    </button>
+                {% endif %}
+            </div>
+        </div>
+    
+    </div>
+
+    <hr class="divider">
+
+    <div class="rewards-card mx-2 p-3">
+        <div class="div-row">
+            <div class="task-number">
+                <img src="../../static/images/user/mine/Army Star.png" >
+                <span style="font-size:15px; font-weight: 700; color: #214579;">Team 1</span>
+            </div>
+            <div>
+                <span style="font-size: 15px; font-weight: 700; color: #F29D38;">12%</span>
+            </div>  
+        </div>
+        <div class="d-flex justify-content-between mt-2">
+            <h5 style="font-size: 12px; font-weight: 500; color: #363535;">Members</h5>
+            <span style="font-size: 12px; font-weight: 500; color: #363535;">{{Level_1_count}}</span>
+        </div>
+        <div class="d-flex justify-content-between mt-2">
+            <h5 style="font-size: 12px; font-weight: 500; color: #363535;">Commission</h5>
+            <span style="font-size: 12px; font-weight: 500; color: #363535;">RS {{Level_1_income |floatformat:"2"}}</span>
+        </div>
+        <div class="d-flex justify-content-between mt-2">
+            <h5 style="font-size: 12px; font-weight: 500; color: #363535;">Invest</h5>            
+            <span style="font-size: 12px; font-weight: 500; color: #363535;">RS 
+                {% if level_2_deposit == None %}
+                0
+                {% else %}
+                {{level_2_deposit}}
+                {% endif %}</span>
+        </div>
+    </div>  
+
+    <hr class="divider">
+
+    <div class="rewards-card mx-2 p-3">
+        <div class="div-row">
+            <div class="task-number">
+                <img src="../../static/images/user/mine/Army Star.png" >
+                <span style="font-size:15px; font-weight: 700; color: #214579;">Team 2</span>
+            </div>
+            <div>
+                <span style="font-size: 15px; font-weight: 700; color: #F29D38;">5%</span>
+            </div>  
+        </div>
+        <div class="d-flex justify-content-between mt-2">
+            <h5 style="font-size: 12px; font-weight: 500; color: #363535;">Members</h5>
+            <span style="font-size: 12px; font-weight: 500; color: #363535;">{{Level_2_count}}</span>
+        </div>
+        <div class="d-flex justify-content-between mt-2">
+            <h5 style="font-size: 12px; font-weight: 500; color: #363535;">Commission</h5>
+            <span style="font-size: 12px; font-weight: 500; color: #363535;">RS {{Level_2_income |floatformat:"2"}}</span>
+        </div>
+        <div class="d-flex justify-content-between mt-2">
+            <h5 style="font-size: 12px; font-weight: 500; color: #363535;">Invest</h5>            
+            <span style="font-size: 12px; font-weight: 500; color: #363535;">RS 
+                {% if level_2_deposit == None %}
+                0
+                {% else %}
+                {{level_2_deposit}}
+                {% endif %}</span>
+        </div>
+    </div>  
+
+    <hr class="divider">
+
+    <div class="rewards-card mx-2 p-3">
+        <div class="div-row">
+            <div class="task-number">
+                <img src="../../static/images/user/mine/Army Star.png" >
+                <span style="font-size: 15px; font-weight: 700; color: #214579;">Team 3</span>
+            </div>
+            <div>
+                <span style="font-size: 15px; font-weight: 700; color: #F29D38;">1%</span>
+            </div>  
+        </div>
+        <div class="d-flex justify-content-between mt-2">
+            <h5 style="font-size: 12px; font-weight: 500; color: #363535;">Members</h5>
+            <span style="font-size: 12px; font-weight: 500; color: #363535;">{{Level_3_count}}</span>
+        </div>
+        <div class="d-flex justify-content-between mt-2">
+            <h5 style="font-size: 12px; font-weight: 500; color: #363535;">Commission</h5>
+            <span style="font-size: 12px; font-weight: 500; color: #363535;">RS {{Level_3_income |floatformat:"2"}}</span>
+        </div>
+        <div class="d-flex justify-content-between mt-2">
+            <h5 style="font-size: 12px; font-weight: 500; color: #363535;">Invest</h5>            
+            <span style="font-size: 12px; font-weight: 500; color: #363535;">RS 
+                {% if level_3_deposit == None %}
+                0
+                {% else %}
+                {{level_3_deposit}}
+                {% endif %}</span>
+        </div>
+    </div>
+</div>
+<!-- 
+</div>
+    <div class="team-level mx-3 p-3 mt-4">
+        <div class="d-flex justify-content-between">
+            <span style="font-size: 15px; font-weight: 700; color: #000000;"> Level 1</span>
+            <span style="font-size: 13px; font-weight: 700; color: #000000;">12%</span>
+        </div>
+        <div class="d-flex justify-content-between mt-1">
+            <div>
+                <div class=" text-center">
+                    <span class="team-card-sub-heading">{{Level_1_count}}</span>
+                </div>
+                <div class="withdraw-label">
+                    <span class="team-sub-heading">Total people</span>
+                </div>
+            </div>
+            <div class="style-line">
+
+            </div>
+            <div>
+                <div class=" text-center">
+                    <span class="team-card-sub-heading">RS {{Level_1_income |floatformat:"2"}}</span>
+                </div>
+                <div class="withdraw-label">
+                    <span class="team-sub-heading">Commission</span>
+                </div>
+            </div>
+        </div>
+        <div class="d-flex justify-content-between">
+                <div class="recieve-label">
+                    <span class="team-sub-heading">Total Invest</span>
+                </div>
+                <div>
+                    <span class="team-card-sub-heading">RS 
+                        {% if level_1_deposit == None %}
+                        0
+                        {% else %}
+                        {{level_1_deposit}}
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+
+    </div>
+
+    <div class="team-level mx-3 p-3 mt-4">
+        <div class="d-flex justify-content-between">
+            <span style="font-size: 15px; font-weight: 700; color: #000000;"> Level 2</span>
+            <span style="font-size: 13px; font-weight: 700; color: #000000;">5%</span>
+        </div>
+        <div class="d-flex justify-content-between mt-1">
+            <div>
+                <div class="text-center">
+                    <span class="team-card-sub-heading">{{Level_2_count}}</span>
+                </div>
+                <div class="withdraw-label">
+                    <span class="team-sub-heading">Total people</span>
+                </div>
+            </div>
+            <div class="style-line"></div>
+            <div>
+                <div class="text-center">
+                    <span class="team-card-sub-heading">RS {{Level_2_income |floatformat:"2"}}</span>
+                </div>
+                <div class="withdraw-label">
+                    <span class="team-sub-heading">Commission</span>
+                </div>
+            </div>
+
+            <div class="d-flex justify-content-between">
+                <div class="recieve-label">
+                    <span class="team-sub-heading">Total Invest</span>
+                </div>
+                <div>
+                    <span class="team-card-sub-heading">RS 
+                        {% if level_2_deposit == None %}
+                        0
+                        {% else %}
+                        {{level_2_deposit}}
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div class="team-level mx-3 p-3 mt-4">
+        <div class="d-flex justify-content-between">
+            <span style="font-size: 15px; font-weight: 700; color: #000000;">Level 3</span>
+            <span style="font-size: 13px; font-weight: 700; color: #000000;">1%</span>
+        </div>
+        <div class="d-flex justify-content-between mt-1">
+            <div>
+                <div class="text-center">
+                    <span class="team-card-sub-heading">{{Level_3_count}}</span>
+                </div>
+                <div class="withdraw-label">
+                    <span class="team-sub-heading">Total people</span>
+                </div>
+            </div>
+
+            <div class="style-line"></div>
+            <div>
+                <div class="text-center">
+                    <span class="team-card-sub-heading">RS {{Level_3_income |floatformat:"2"}}</span>
+                </div>
+                <div class="withdraw-label">
+                    <span class="team-sub-heading">Commission</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between">
+                <div class="recieve-label">
+                    <span class="team-sub-heading">Total Invest</span>
+                </div>
+                <div>
+                    <span class="team-card-sub-heading">RS 
+                        {% if level_3_deposit == None %}
+                        0
+                        {% else %}
+                        {{level_3_deposit}}
+                        {% endif %}
+                    </span>
+                </div>
+            </div>
+
+    </div> -->
+
+    <!-- reward - div ended -->
+    <!-- Toast message  -->
+    <div class="toast-container position-fixed top-0 end-0 p-3">
+        <div id="liveToast" class="toast bg-success" role="alert" aria-live="assertive" aria-atomic="true">
+            <div class="toast-body  text-white">
+                Reference code copy.
+                <button type="button" class="btn-close" style="float: right;" data-bs-dismiss="toast"
+                    aria-label="Close"></button>
+            </div>
+        </div>
+    </div>
+
+{% include 'nav-bar.html' %}
+<!--<div id="snackbar" >Copy Successfully</div>-->
+
+<script>
+    var snackbar = document.getElementById("snackbar");
+
+    function copyToClipboard() {
+        const div = document.getElementById("referal_code");
+        const textarea = document.createElement("textarea");
+        textarea.value = div.innerText;
+        // Append the textarea to the document
+        document.body.appendChild(textarea);
+        // Select the text in the textarea
+        textarea.select();
+        textarea.setSelectionRange(0, 99999);
+        // Copy the selected text to the clipboard
+        document.execCommand("copy");
+        // Remove the temporary textarea
+        document.body.removeChild(textarea);
+        snackbar.textContent = 'Copy';
+        snackbar.className = "show";
+        setTimeout(function() {
+            snackbar.className = snackbar.className.replace("show", "");
+        }, 3000);
+    }
+
+    function copyToClipboardLink() {
+        const div = document.getElementById("referal_link");
+        const textarea = document.createElement("textarea");
+        textarea.value = div.innerText;
+        // Append the textarea to the document
+        document.body.appendChild(textarea);
+        // Select the text in the textarea
+        textarea.select();
+        textarea.setSelectionRange(0, 99999);
+        // Copy the selected text to the clipboard
+        document.execCommand("copy");
+        // Remove the temporary textarea
+        document.body.removeChild(textarea);
+        snackbar.textContent = 'Copy';
+        snackbar.className = "show";
+        setTimeout(function() {
+            snackbar.className = snackbar.className.replace("show", "");
+        }, 3000);
+    }
+</script>
+<script>
+    const targetDiv = document.getElementById("team_div");
+    targetDiv.classList.add("active");
+</script>
+
+{% endblock %}

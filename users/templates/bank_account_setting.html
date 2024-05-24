@@ -1,0 +1,354 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block title %}Account{% endblock %}
+
+{% block content %}
+
+<head>
+    <style>
+        .imageInput1 {
+            background-image: url('../../static/images/new/easypaisa.png');
+            background-size: 120px;
+            /* You can adjust the size as needed */
+            background-repeat: no-repeat;
+            padding-left: 25px;
+            /* Adjust this value to leave space for the image */
+        }
+
+        .imageInput2 {
+            background-image: url('../../static/images/new/jazzcash.png');
+            background-size: 90px;
+            /* You can adjust the size as needed */
+            background-repeat: no-repeat;
+            padding-left: 25px;
+            /* Adjust this value to leave space for the image */
+        }
+
+        body {
+            font-family: Montserrat;
+            margin: 0;
+            padding: 0;
+            /* background-color: black; */
+        }
+
+        .form-group {
+            margin-bottom: 5px;
+            margin-top: 20px;
+        }
+
+        .form-group label {
+            font-family: Tienne;
+            font-size: 11px;
+            font-weight: 700;
+            color: #000000B2;
+        }
+
+        .form-group input,
+        select, .select-bank-style {
+            padding: 12px;
+            margin-top: 8px;
+            width: 100%;
+            font-family: Tienne;
+            font-size: 14px;
+            font-weight: 400;
+            color: #000000;
+            border-radius: 50px;
+            border: none;
+            background-color: #F0F0F0;
+        }
+
+        .form-group input[type="text"]:disabled {
+            background-color: #f4f4f4;
+        }
+
+        .register-button {
+            color: white;
+            background: #214579;
+            border: none;
+            cursor: pointer;
+            border-radius: 7px;
+            width: 210px;
+            height: 45px;
+            font-family: Tienne;
+            font-size: 14px;
+            font-weight: 700;
+
+        }
+
+        .heading_label {
+            background-color: #3F3F3F;
+            border-radius: 0px 0px 0px 47px;
+        }
+
+        .popup-select {
+            background-color: #FFFFFF;
+            border-radius: 8px;
+            box-shadow: 0px 0px 5.929411888122559px 0px #00000040;
+            width: 150px;
+            margin-top: 10px;
+
+        }
+
+        ::placeholder {
+            font-family: Montserrat;
+            font-size: 10px;
+            font-weight: 300;
+            color: #212121;
+        }
+
+        .options {
+            display: none;
+            position: absolute;
+            box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
+            z-index: 5;
+            border-radius: 8px;
+            right: 25px;
+            margin-top: 10px;
+            width: 21%;
+            text-align: center;
+        }
+
+        .option {
+            padding: 10px;
+            cursor: pointer;
+            font-family: Tienne;
+            font-size: 11px;
+            font-weight: 700;
+            color: #000000B2;
+            background: linear-gradient(180deg, #abbbd3 0%, #214579 100%);
+            border-radius: 6px 6px 0px 0px;
+            text-align: start;
+        }
+
+        .option:hover {
+            background: linear-gradient(180deg, #FFE9CF 0%, #B96E16 100%);
+        }
+
+        .custom-dropdown {
+            align-self: center;
+        }
+
+        .select-bank{
+            font-family: DM Serif Text;
+            font-size: 10px;
+            font-weight: 400;
+            color: #000000;
+            padding: 7px;
+        }
+        ::-ms-input-placeholder { 
+            font-family: Tienne;
+            font-size: 10px;
+            font-weight: 400;
+            color: #00000040;
+        }
+
+        ::placeholder {
+            font-family: Tienne;
+            font-size: 10px;
+            font-weight: 400;
+            color: #00000040;
+         }
+        .header-heading{
+            font-family: Tienne;
+            font-size: 16px;
+            font-weight: 600;
+            text-align: center;
+            color: blue;
+        }
+    </style>
+</head>
+
+<body class="main-layout">
+<div class="mx-auto text-center">
+    <h4 id="snackbar_error"></h4>
+    </div>
+<div class="mx-auto col-sm-10">
+    <h4 id="snackbar"></h4>
+</div>
+<div class="header-heading m-3">
+    Bank Account
+     </div>
+<!-- <div class="mt-4">
+    <img src="../../static/images/new/bank-detials.png" alt="" class="w-100">
+</div> -->
+    <div class="mt-5 px-4">
+        <form method="POST" action="/account/" id="bankForm">
+            {% csrf_token %}
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                                <script>
+                                    var snackbar = document.getElementById("snackbar_error");
+                                    snackbar.className = "show";
+                                    snackbar.textContent = '{{ message }}'
+                                    setTimeout(function(){ snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+                            </script>
+                    {% else %}
+                                <script>
+                                    var snackbar2 = document.getElementById("snackbar");
+                                    snackbar2.className = "show";
+                                    snackbar2.textContent = '{{ message }}'
+                                    setTimeout(function(){ snackbar2.className = snackbar2.className.replace("show", ""); }, 3000);
+                            </script>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+            <div class="form-group ">
+                <label for="holder-name">Holder Name</label>
+                <input type="text" id="holder-name" name="account_name" value="{{user_bank_account.account_title}}"
+                    required  placeholder="Enter holder’s full name">
+            </div>
+
+            <div class="form-group">
+                <label for="account-number">Account Number:</label>
+                {% if user_bank_account.bank_id.bank_name == 'JazzCash' or user_bank_account.bank_id.bank_name == 'Easypaisa' %}
+                <input type="number" id="account-number no-arrow" name="account_number" maxlength="20" minlength="10"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    placeholder="Enter your account number" required id="phone_input_sm"
+                    value="0{{user_bank_account.account_number}}" required
+                    >
+                {% else %}
+                <input type="number" id="account-number no-arrow" name="account_number" maxlength="20" minlength="10"
+                    oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                    placeholder="Please enter your account number " required id="phone_input_sm"
+                    value="{{user_bank_account.account_number}}" required
+                    >
+                {% endif %}
+            </div>
+               
+
+            <div class="form-group">
+                <label for="bank">Select Bank:</label>
+                <div class="d-flex select-bank-style p-0 ps-3" id="customDropdown">
+                    {% if user_bank_account %}
+                        <div class="custom-dropdown w-100">
+                            <span class='selected-bank mt-1'>{{ user_bank_account.bank_id.bank_name }}</span>
+                            <div class="options">
+                                {% if user_bank_account.bank_id.bank_name == 'Easypaisa' %}
+                                    <input class='mt-1' hidden type="text" name="bank"  value="Easypaisa"
+                                    id="bamkselect" style="border: none; box-shadow: none; background-color: transparent; padding: 0; margin: 0;">
+                                    <div class="option" data-value="Easypaisa">Easypaisa</div>
+                                    <div class="option" data-value="JazzCash">JazzCash</div>
+                                {% elif user_bank_account.bank_id.bank_name == 'JazzCash' %}
+                                    <div class="option" data-value="Easypaisa">Easypaisa</div>
+                                    <div class="option" data-value="JazzCash">JazzCash</div>
+                                    <input class='mt-1' type="text" name="bank"  hidden value='JazzCash'
+                                    id="bamkselect"style="border: none; box-shadow: none; background-color: transparent; padding: 0; margin: 0;">
+                                {% endif %}
+                            </div>
+                        </div>
+                    {% else %}
+                        <input class='' type="text" hidden placeholder="select your bank" name="bank" 
+                        id="bamkselect" style="border: none; box-shadow: none; background-color: transparent; padding: 0; margin: 0;">
+
+                        <div class="custom-dropdown w-100">
+                            <span class='selected-bank mt-1'>Select your bank</span>
+                            <div class="options mt-4">
+                                <div class="option" data-value="Easypaisa">Easypaisa</div>
+                                <div class="option" data-value="JazzCash">JazzCash</div>
+                            </div>
+                        </div>
+                    {% endif %}
+                    <div class="text-end" style="background-color: #214579; border-radius: 0px 5px 5px 0px; padding: 15px 12px;">
+                        <i class="fa-solid fa-arrow-down text-white"></i>
+                    </div>
+                </div>
+
+            <div class="modal" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+                <div class="modal-dialog  modal-dialog-centered p-2">
+                    <div class="modal-content mx-4  p-3" style="background: #B4660B; border-radius: 18px; ">
+                        <h1 class="text-center" style="font-size: 12.82px; font-weight: 700; color: #FFFFFF;">Select Bank</h1>
+                        <a class="text-center mt-3">
+                            <img src="../../static/images/new/easypaisa.png" class="popup-select px-4" id="SetEasypasia" style="padding: 15px;">
+                        </a>
+                        <a class="text-center mt-2">
+                            <img src="../../static/images/new/jazzcash.png" class="popup-select px-4" id="SetJazzcash" style="padding: 10px;">
+            
+                        </a>
+                    </div>
+                </div>
+            </div>
+        <div class="d-flex justify-content-center">
+
+            {% if user_bank_account %}
+            <input type="number" name="id" value="{{user_bank_account.id}}" hidden>
+                <button class="register-button text_align_center px-5 p-2 mt-5" type="submit" id="submitButton">Update </button>
+                {% else %}
+                <button class="register-button text_align_center px-5 p-2 mt-5" type="submit" id="submitButton">Confirm</button>
+                {% endif %}
+            </div>
+        </form>
+    </div>
+    <script>
+        var targetDiv = document.getElementById("bamkselect");
+       // targetDiv.disabled = true;
+
+        document.getElementById("SetEasypasia").addEventListener("click", function() {
+            const inputValue = "Easypaisa"; // Replace this with the value you want to set
+            //document.getElementById("bank").value = inputValue;
+            targetDiv.value = inputValue;
+           // targetDiv.classList.remove("imageInput2");
+           // targetDiv.classList.add("imageInput1");
+           // $('#exampleModal').modal('hide');
+        });
+        document.getElementById("SetJazzcash").addEventListener("click", function() {
+            const inputValue = "JazzCash"; // Replace this with the value you want to set
+           // document.getElementById("bank").value = inputValue;
+            targetDiv.value = inputValue;
+            //targetDiv.classList.remove("imageInput1");
+            //targetDiv.classList.add("imageInput2");
+           // $('#exampleModal').modal('hide');
+        });
+        
+        {% comment %} var  {% endcomment %}
+        {% comment %} setEasypasia(){
+            const targetDiv = document.getElementById("bamkselect");
+            targetDiv.classList.add("imageInput1");
+        } {% endcomment %}
+    </script>
+    <script>
+
+        var submitButton = document.getElementById("submitButton");
+        var phone = document.getElementById('phone_input_sm');
+        var snackbar = document.getElementById("snackbar_error");
+
+        document.getElementById('bankForm').addEventListener('submit', function (event) {
+            var minLength_phone_sm = parseInt(phone.getAttribute('minlength'));
+            var phoneValue_sm = phone.value.trim();
+
+            if (phoneValue.length < minLength_phone) {
+                event.preventDefault(); // Prevent form submission
+                snackbar.className = "show";
+                snackbar.textContent = 'Please enter valid phone number. \n Phone number must be ' + minLength_phone + ' digit long.'
+                setTimeout(function(){ snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+            }
+        });
+
+    </script>
+
+
+<script>
+    var customDropdown = document.getElementById('customDropdown');
+    var options = customDropdown.querySelector('.options');
+
+    customDropdown.addEventListener('click', function() {
+        options.style.display = (options.style.display === 'block') ? 'none' : 'block';
+    });
+
+    var optionElements = document.querySelectorAll('.option');
+    optionElements.forEach(function(option) {
+        option.addEventListener('click', function() {
+            var selectedBank = this.getAttribute('data-value');
+            document.querySelector('.selected-bank').textContent = selectedBank;
+            targetDiv.value = selectedBank;
+            document.getElementById("bank").value = selectedBank
+            options.style.display = 'none';
+        });
+    });
+</script>
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.5.2/dist/js/bootstrap.min.js"></script>
+
+    {% include 'nav-bar.html' %}
+</body>
+{% endblock %}

@@ -1,0 +1,416 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block title %} My Income{% endblock %}
+
+{% block content %}
+
+<head>
+    {% comment %}
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href="{% static './css/history.css' %}"> {% endcomment %}
+</head>
+<style>
+    * {
+        font-family: Montserrat;
+    }
+
+    .invite_income {
+        border-radius: 10px;
+        box-shadow: 0px 0px 6px 0px #0000001A;
+        background-color: #F0F0F0;
+    }
+
+    .date_time {
+        font-family: Tienne;
+        font-size: 9px;
+        font-weight: 400;
+        color: #3F3F3F;
+    }
+
+    .price_tag {
+        font-family: Tienne;
+        font-size: 9px;
+        font-weight: 700;
+        color: #3F3F3F;
+
+    }
+
+    .income_subheading {
+        font-family: Tienne;
+        font-size: 16px;
+        font-weight: 800;
+        color: #3F3F3F;
+    }
+
+    .tabs {
+        background: white;
+        display: flex;
+        list-style: none;
+        padding: 0;
+        margin: 0;
+        border-radius: 50px;
+        box-shadow: 1px 4px 10px 0px #000000;
+    }
+
+    .tab {
+        flex: 1;
+        text-align: center;
+        cursor: pointer;
+        font-family: Tienne;
+        font-size: 10px;
+        font-weight: 700;
+        color: #FFFFFFAB;
+        color: black;
+    }
+
+    .tab:hover {
+        background: linear-gradient(180deg, #E88A1E 0%, #9F5703 100%);
+        font-family: Tienne;
+        font-size: 10px;
+        font-weight: 700;
+        color: white;
+        border-radius: 10px;
+    }
+
+    .tab.active {
+        background: #214579;
+        font-family: Tienne;
+        font-size: 10px;
+        font-weight: 700;
+        color: white;
+        border-radius: 50px;
+    }
+
+    .tab-content {
+        display: none;
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    .recharge-plan {
+        width: -webkit-fill-available;
+        box-shadow: 0px 0px 20.600000381469727px 0px #0000001F;
+        border-radius: 16px;
+        background-color: #F0F0F0;
+    }
+
+    .sub-heading {
+        font-family: Piazzolla;
+        font-size: 12px;
+        font-weight: 400;
+        color: #272727;
+
+
+    }
+
+    .plan-main-heading {
+        background: linear-gradient(180deg, rgba(230, 136, 29, 0.7) 0%, rgba(112, 60, 0, 0.7) 100%);
+        border-radius: 16px;
+        font-family: Tienne;
+        font-size: 12px;
+        font-weight: 700;
+        color: #FFFFFF;
+    }
+
+    .header-heading {
+        font-family: Tienne;
+        font-size: 18px;
+        font-weight: 700;
+        text-align: center;
+        color: #214579
+    }
+</style>
+
+<body>
+        <!-- <div style="position: absolute; left: 28%; top: 6%;">
+            <span style="font-family: DM Serif Text;
+            font-size: 27px;
+            font-weight: 400;
+            color: rgba(255, 255, 255, 1);
+
+            ">Change Password</span>
+        </div> -->
+        <div class="header-heading m-3">
+            Bill
+            </div>
+        <div class="mx-3">
+        <ul class="tabs  w-100 p-0">
+            <li class="tab p-3 align-self-center active" onclick="showTab('income')">Income</li>
+            <li class="tab p-3 align-self-center" onclick="showTab('recharge')">Recharge</li>
+            <li class="tab p-3 align-self-center" onclick="showTab('withdraw')">Withdraw</li>
+        </ul>
+    </div>
+    <div id="incomeTab" class="tab-content active">
+        <div class="container ">
+            {% if income_history %}
+            {% for i in income_history %}
+            <div class="invite_income mt-3">
+                <div class="income-plan-div d-flex pe-4 p-2 ">
+                    <div class="col-3 align-self-end">
+                        <img src="{% static 'images/headphone/income-icon.png' %}" alt="Your Image"
+                            style="width: 69px; height: 69px;">
+                    </div>
+                    <div class="col-9 align-self-center">
+                        <h5 class="income_subheading">
+                            {% if i.income_resource == "My Investment Income" %}
+                            Investment Income
+                            {% elif i.income_resource == "Reference Income" %}
+                            Reference Commission
+                            {% elif i.income_resource == "Reference CashBack" %}
+                            Cash Back
+                            {% elif i.income_resource == "Daily Reward" %}
+                            Check in
+                            {% elif i.income_resource == "Extra Bonus" %}
+                            Bonus
+                            {% elif i.income_resource == "Task Completed" %}
+                            {{i.income_resource}} <span style="font-size:small">({{i.task_detail}})</span>
+                            {% else %}
+                            {{i.income_resource}}
+                            {% endif %}
+                        </h5>
+                        <div class="d-flex justify-content-between mt-3">
+                            <h1 class="date_time">{{i.income_at|date:"d/m/Y H:i"}}</h1>
+                            <h1 class="price_tag ">RS {{i.amount |floatformat:"3"}}</h1>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+            {% else %}
+            <div class="mt-5 text-center">
+                <img src="../../static/images/headphone/no-data-found.png" alt="" style="width: 230px;">
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <div id="rechargeTab" class="tab-content">
+        <div class="container">
+            {% if deposit_history %}
+            {% for i in deposit_history %}
+            <div class="recharge-plan mt-3 pb-3">
+                <div class="d-flex justify-content-between">
+                    <div>
+                        <span class="plan-main-heading p-2 px-3">Recharge Status</span>
+                    </div>
+                    <div>
+                        {% if i.status == 'Deposit Success' %}
+                    <div>
+                        <img src="../../static/images/headphone/status-success-icon.png" style="width: 32px;">
+                    </div>
+                        {% elif i.status == 'Deposit Failed' %}
+                        <div>
+                            <img src="../../static/images/headphone/status-reject-icon.png" style="width: 32px;">
+                        </div>
+                        {% else %}
+                        <div>
+                            <img src="../../static/images/headphone/status-pending-icon.png" style="width: 32px;">
+                        </div>
+
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between px-2 mt-3">
+                    <div class="withdraw-label">
+                        <span class="sub-heading">Recharge Amount </span>
+                    </div>
+                    <div>
+                        <span class="sub-heading pe-2">RS {{i.amount |floatformat:"2"}}</span>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between px-2 mt-3">
+                    <div class="order-label">
+                        <span class="sub-heading">Order Time</span>
+                    </div>
+                    <div class="date_time ">
+                        <span class="sub-heading pe-2">{{i.deposit_request_at|date:"d/m/Y H:i"}}</span>
+                    </div>
+                </div>
+            </div>
+            <!-- <div>
+                        <img src="../../static/images/new/re-record-div-bg.png" style="width: 100%;" alt="">
+                    </div> -->
+            {% endfor %}
+            {% else %}
+            <div class="mt-5 text-center">
+                <img src="../../static/images/headphone/no-data-found.png" alt="" style="width: 230px;">
+            </div>
+            {% endif %}
+
+        </div>
+    </div>
+
+    <div id="withdrawTab" class="tab-content">
+        <div class="container">
+            {% if withdraw_history %}
+            {% for i in withdraw_history %}
+            <div class="recharge-plan mt-3 pb-3">
+                <div class="d-flex justify-content-between pt-">
+                    <div>
+                        <span class="plan-main-heading p-2 px-3">Withdraw Status</span>
+                    </div>
+                    <div >
+                        {% if i.status == 'Withdraw Success' %}
+                        <div>
+                            <img src="../../static/images/headphone/status-success-icon.png" style="width: 32px;">
+                        </div>
+                        {% elif i.status == 'Withdraw Failed' %}
+                        <div>
+                            <img src="../../static/images/headphone/status-reject-icon.png" style="width: 32px;">
+                        </div>
+                        {% else %}
+                        <div>
+                            <img src="../../static/images/headphone/status-pending-icon.png" style="width: 32px;">
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between mt-3 px-2">
+                    <div class="withdraw-label">
+                        <span class="sub-heading">Withdraw Amount</span>
+                    </div>
+                    <div>
+                        <span class="sub-heading pe-2">RS {{i.withdraw_amount |floatformat:"1"}}</span>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-3 px-2">
+                    <div class="recieve-label">
+                        <span class="sub-heading">Recieve Amount</span>
+                    </div>
+                    <div>
+                        <span class="sub-heading pe-2">RS {{i.amount_received |floatformat:"2"}}</span>
+                    </div>
+                </div>
+
+                <div class="d-flex justify-content-between mt-2 mx-2">
+                    <div class="order-label">
+                        <span class="sub-heading">Order Time</span>
+                    </div>
+                    <div class="date_time ">
+                        <span class="sub-heading pe-2">{{i.withdraw_request_at|date:"d/m/Y H:i"}}</span>
+                    </div>
+                </div>
+                <div class="d-flex justify-content-between mt-2 mx-2">
+                    <div class="order-label">
+                        {% if i.user_account.bank_id.bank_name == 'Easypaisa' %}
+                        <h1 style="font-family: Piazzolla;
+                                font-size: 12px;
+                                font-weight: 400;
+                                color: #000000;
+                                ">Easypaisa</h1>
+                        {% else %}
+                        <h1 style="font-family: Piazzolla;
+                                font-size: 12px;
+                                font-weight: 400;
+                                color: #000000;
+                                ">JazzCash</h1>
+                        {% endif %}
+                    </div>
+                    <div class="date_time ">
+                        <span class="sub-heading pe-2">0{{i.user_account.account_number}}</span>
+                    </div>
+                </div>
+            </div>
+            <!-- <div>
+                        <img src="../../static/images/new/record-div-bg.png" style="width: 100%;" alt="" class="py-2">
+                    </div> -->
+            {% endfor %}
+            {% else %}
+            <br><br>
+            <div class="mt-5 text-center">
+                <img src="../../static/images/headphone/no-data-found.png" alt="" style="width: 230px;">
+            </div>
+            {% endif %}
+        </div>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            // Handle pagination link clicks
+            $(document).on('click', '#pagination-income a', function(event) {
+                event.preventDefault();
+                var pageUrl = $(this).attr('href');
+                // Make AJAX request to fetch the new page data
+                $.ajax({
+                    url: pageUrl,
+                    type: 'GET',
+                    dataType: 'html',
+                    success: function(data) {
+                        var result = $('<div />').append(data);
+                        var newContent = result.find('#income').html();
+                        var newPagination = result.find('#pagination-income').html();
+                        // Update the content and pagination
+                        $('#income').html(newContent);
+                        $('#pagination-income').html(newPagination);
+                    },
+                    error: function() {
+                        alert('Error occurred while fetching page.');
+                    }
+                });
+            });
+            $(document).on('click', '#pagination-recharge a', function(event) {
+                event.preventDefault();
+                var pageUrl = $(this).attr('href');
+                // Make AJAX request to fetch the new page data
+                $.ajax({
+                    url: pageUrl,
+                    type: 'GET',
+                    dataType: 'html',
+                    success: function(data) {
+                        var result = $('<div />').append(data);
+                        var newContent = result.find('#recharge').html();
+                        var newPagination = result.find('#pagination-recharge').html();
+                        // Update the content and pagination
+                        $('#recharge').html(newContent);
+                        $('#pagination-recharge').html(newPagination);
+                    },
+                    error: function() {
+                        alert('Error occurred while fetching page.');
+                    }
+                });
+            });
+            $(document).on('click', '#pagination-withdraw a', function(event) {
+                event.preventDefault();
+                var pageUrl = $(this).attr('href');
+                // Make AJAX request to fetch the new page data
+                $.ajax({
+                    url: pageUrl,
+                    type: 'GET',
+                    dataType: 'html',
+                    success: function(data) {
+                        var result = $('<div />').append(data);
+                        var newContent = result.find('#withdraw').html();
+                        var newPagination = result.find('#pagination-withdraw').html();
+                        // Update the content and pagination
+                        $('#withdraw').html(newContent);
+                        $('#pagination-withdraw').html(newPagination);
+                    },
+                    error: function() {
+                        alert('Error occurred while fetching page.');
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        function showTab(tabName) {
+            // Hide all tabs and remove the 'active' class
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            document.querySelectorAll('.tab').forEach(tab => {
+                tab.classList.remove('active');
+            });
+            // Show the selected tab and add the 'active' class
+            document.getElementById(tabName + 'Tab').classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+    </script>
+    {% include 'nav-bar.html' %}
+</body>
+{% endblock %}

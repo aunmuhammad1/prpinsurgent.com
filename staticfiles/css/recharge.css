@@ -1,0 +1,109 @@
+.header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.back-arrow {
+  font-size: 24px;
+  color: white;
+  cursor: pointer;
+}
+
+.total-amount {
+  font-size: 24px;
+  color: white;
+}
+
+.recharge-section {
+  margin-bottom: 20px;
+}
+
+.recharge-label {
+  font-size: 20px;
+  color: white;
+}
+
+.recharge-input {
+  width: 100%;
+  padding: 10px;
+  font-size: 14px;
+  border-radius: 10px;
+}
+
+.amount-section {
+  display: flex;
+  justify-content: space-between;
+  align-items: start;
+}
+.amount-button:last-child {
+  margin-right: 0;
+}
+
+.amount-button:hover {
+  background-color: #146266;
+}
+
+@media screen and (max-width: 576px) {
+  .amount-button {
+    margin-bottom: 10px;
+  }
+}
+
+#header-container {
+  max-width: 100%;
+  padding: 0px;
+  margin: 0 auto;
+}
+
+
+.card-content {
+  display: flex;
+  align-items: center;
+}
+
+.title-container {
+  flex-grow: 1;
+}
+
+.title {
+  font-weight: bold;
+  color: blueviolet;
+}
+
+.image-container {
+  flex-shrink: 0;
+  margin-left: 20px;
+}
+
+.image {
+  width: 100%;
+  height: auto;
+  border-radius: 8px;
+}
+
+@media screen and (min-width: 768px) {
+  #header-container {
+    max-width: 750px;
+  }
+}
+
+@media screen and (min-width: 992px) {
+  #header-container {
+    max-width: 970px;
+  }
+}
+
+@media screen and (min-width: 1200px) {
+  #header-container {
+    max-width: 1170px;
+  }
+}
+
+@media screen and (max-width: 576px) {
+  #header-card {
+    height: 100px;
+    overflow: hidden;
+  }
+}

@@ -1,0 +1,187 @@
+{% load static %}
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<style>
+    @keyframes slideDown {
+        from {
+            transform: translateY(-100%);
+        }
+        to {
+            transform: translateY(0);
+        }
+    }
+
+    .custom-slide-down {
+        animation: slideDown 0.8s ease-in-out;
+    }
+
+    .modal-content {
+        background: linear-gradient(180deg, #0056b3 0%, #F0F0F0 100%);
+        border-radius: 15px;
+        padding: 20px;
+        margin: 9px;
+        text-align: center;
+        box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .modal-header, .modal-body, .modal-footer {
+        border: none;
+    }
+
+    .modal-body {
+        padding: 20px 10px;
+    }
+
+    .modal-title {
+        font-size: 24px;
+        font-weight: bold;
+        color: White;
+        margin-bottom: 10px;
+    }
+
+    .modal-body p {
+        font-size: 16px;
+        color: black;
+        margin-bottom: 10px;
+    }
+
+    .btn-primary {
+        background-color: #007BFF;
+        border-color: #007BFF;
+        color: #FFFFFF;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 5px;
+    }
+
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #004085;
+    }
+
+    .telegram-btn {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-top: 20px;
+        background-color: #0088cc;
+        color: white;
+        font-size: 16px;
+        font-weight: bold;
+        padding: 10px 20px;
+        border-radius: 5px;
+        text-decoration: none;
+    }
+
+    .telegram-btn img {
+        margin-right: 10px;
+    }
+
+    .modal-img {
+        max-width: 100%;
+        height: auto;
+        margin-bottom: 20px;
+    }
+
+    .modal-text {
+        text-align: left;
+        font-size: 14px;
+        color: #333;
+    }
+
+    .modal-text p {
+        margin: 5px 0;
+    }
+
+    .modal-text p strong {
+        color: #007BFF;
+    }
+    .satellite {
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 5;
+    }
+
+    .close {
+      position: absolute;
+      top: -11px;
+      left: 9px;
+      z-index: 5;
+      color: #000;
+      font-size: 45px;
+      font-weight: bold;
+      padding: 0px;
+    }
+    .close:hover {
+      color: #000;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    .modal-img{
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      flex-direction: row;
+    
+    }
+    .telegram-btn{
+      display: flex;
+      justify-content: space-evenly;
+      align-items: center;
+      flex-direction: row;
+    }
+
+
+</style>
+
+<div class="modal custom-slide-down show" id="myPopup" tabindex="-1" role="dialog" aria-labelledby="popupTitle" data-bs-backdrop="static" aria-hidden="true">
+  
+    <div class="modal-dialog modal-dialog-centered modal-sm" role="document">
+
+        <div class="modal-content">
+          <img src="{% static 'images/user\satellite.png' %}" class="satellite" alt="Your Image" class=" w-100">
+            <div class="modal-header">
+                <button type="button" class="close" data-bs-dismiss="modal" aria-label="Close" onclick="intial_popup()" style="background-color: transparent; border: none;">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="modal-img">
+                  <img src="{% static 'images/user\logo.png' %}" alt="Your Image" class="">
+                  <h5 class="modal-title">Satellite</h5>
+                </div>
+                <div class="modal-text">
+                    <p>1. Register and get 165Rs automatically.</p>
+                    <p>2. Earn a daily check in bonus of Rs14.</p>
+                    <p>3. The invitation cash rebate is up to 35%<br>
+                    20% for level 1, 15% and level 2, 5% and level 3., 1% cash rebate.</p>
+                    <p>4. Each invitation reward is Rs 20.</p>
+                </div>
+                <a href="/services/" onclick="navigateToTelegramGroup()" class="telegram-btn">
+                  <i class="fa-brands fa-telegram" style="color: white;" ></i>
+                    <span>Join official Telegram</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(document).ready(function () {
+        $('#myPopup').modal('show');
+    });
+
+    function intial_popup() {
+        $.ajax({
+            url: '/popup/intial/',
+            type: 'GET',
+            error: function (xhr, status, error) {
+                console.error('Error calling view function:', error);
+            }
+        });
+    }
+
+    function navigateToTelegramGroup() {
+        window.location.href = "{{Whatsapp_link.telegram_link}}";
+    }
+</script>

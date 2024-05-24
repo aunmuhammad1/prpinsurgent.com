@@ -1,0 +1,268 @@
+{% load static %}
+
+<div class="nav-left-sidebar sidebar-dark d-none d-lg-block">
+    <div class="menu-list mb-5" style="max-height: 150vh;overflow-y: auto; min-width: 350px;">
+        <nav class="navbar navbar-expand-lg navbar-light">
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav flex-column">
+
+                    <li class="nav-divider">
+                        {% if Company_profile %}
+                        <img src="/media/{{Company_profile.company_logo}}" class="mb-3 mt-4 ml-4"
+                        style="width: 150px;height:150px;border-radius: 50%;" />
+                    {% else %}
+                        <img src="{% static 'deault_profile_image.png'%}" class="mb-3 mt-4 ml-4 rounded-circle"
+                            style="width: auto;height:15vh;" />
+                    {% endif %}
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/" id='dashboard_div'>
+                            <i class="fa fa-fw fa-user-circle"></i>
+                            <span class="ml-2">Dashboard</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/all_users/" id='alluser_div'>
+                            <i class="fa-regular fa-users"></i>
+                            <span class="ml-3">View All User</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/search_users/" id='specific_user_div'>
+                            <i class="fa-regular fa-user"></i>
+                            <span class="ml-3">View Specific User</span>
+                        </a>
+                    </li>
+                    
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                            data-target="#submenu-1" aria-controls="submenu-2" id='plan_div'>
+                            <i class="fa-regular fa-hand-holding-dollar"></i>
+                            <span class="ml-3">Manage Plans</span>
+                        </a>
+                        <div id="submenu-1" class="collapse submenu">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin_dashboard/all_plans/" id='plan_div_1'>View all plans</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin_dashboard/add_plan/" id='plan_div_2'>Add new plans</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                            data-target="#submenu-2" aria-controls="submenu-2" id='bank_div'>
+                            <i class="fa-solid fa-landmark"></i>
+                            <span class="ml-3">Manage Bank Accounts</span>
+                        </a>
+                        <div id="submenu-2" class="collapse submenu">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin_dashboard/all_account/" id='bank_div_1'>View all account</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin_dashboard/add_account/" id='bank_div_2'>Add new account</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                            data-target="#submenu-3" aria-controls="submenu-3" id='deposit_div'>
+                            <i class="fa-solid fa-money-bill-transfer"></i>
+                            <span class="ml-3">View Deposit Requests</span>
+                        </a>
+                        <div id="submenu-3" class="collapse submenu">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin_dashboard/depost/" id='deposit_div_1'>View all Requests</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin_dashboard/approved_depost/" id='deposit_div_2'>Approved Deposit Requests</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin_dashboard/reject_depost/" id='deposit_div_3'>Reject Deposit Requests</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-toggle="collapse" aria-expanded="false"
+                            data-target="#submenu-4" aria-controls="submenu-2" id='withdraw_div'>
+                            <i class="fa-solid fa-wallet"></i>
+                            <span class="ml-3">View Withdraw Requests</span>
+                        </a>
+                        <div id="submenu-4" class="collapse submenu">
+                            <ul class="nav flex-column">
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin_dashboard/withdraw/" id='withdraw_div_1'>View all Requests</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin_dashboard/approved_withdraw/" id='withdraw_div_2'>Approved Withdraw Requests</a>
+                                </li>
+                                <li class="nav-item">
+                                    <a class="nav-link" href="/admin_dashboard/reject_withdraw/" id='withdraw_div_3'>Reject Withdraw Requests</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </li>
+ 
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/socail_contact/" id='contact_div'>
+                            <i class="fa-regular fa-phone-volume"></i>
+                            <span class="ml-3">Manage Contact Information</span>
+                        </a>
+                    </li>
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/profile/" id='profile_div'>
+                            <i class="fa-solid fa-id-card"></i>
+                            <span class="ml-3">User Profile</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/admin_dashboard/company_profile/" id='cprofile_div'>
+                            <i class="fa-solid fa-id-card-clip"></i>
+                            <span class="ml-3">Company Profile</span>
+                        </a>
+                    </li>
+
+                    <li class="nav-item ">
+                        <a class="nav-link" href="/login/logout/">
+                            <i class="fas fa-power-off"></i>
+                            <span class="ml-3">Logout</span>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+    </div>
+</div>
+
+
+<nav class="navbar navbar-dark bg-dark d-block d-sm-block d-lg-none d-xl-none mt-1">
+    <div class="container-fluid">
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
+            aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="/admin_dashboard/" aria-current="page" id='dashboard_nav'>
+                        <i class="fa fa-fw fa-user-circle"></i>
+                        <span class="ml-2">Dashboard</span>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/admin_dashboard/all_users/" id='alluser_nav'>
+                        <i class="fa-regular fa-users"></i>
+                        <span class="ml-2">View All User</span>
+                    </a>
+                </li>
+                <li class="nav-item ">
+                    <a class="nav-link" href="/admin_dashboard/search_users/" id='specific_user_nav'>
+                        <i class="fa-regular fa-user"></i>
+                        <span class="ml-2">Search Specific User</span>
+                    </a>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false"  id='plan_nav'>
+                        <i class="fa-regular fa-hand-holding-dollar"></i>
+                        <span class="ml-3">Manage Plans</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item">
+                            <a class="dropdown-item" href="/admin_dashboard/all_plans/" id='plan_nav_1'>View all plans</a>
+                            <a class="dropdown-item" href="/admin_dashboard/add_plan/"id='plan_nav_2' >Add new plans</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false" id='bank_nav'>
+                        <i class="fa-solid fa-landmark"></i>
+                        <span class="ml-3">Bank Accounts</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item">
+                            <a class="dropdown-item" href="/admin_dashboard/all_account/" id='bank_nav_1'>View all account</a>
+                            <a class="dropdown-item" href="/admin_dashboard/add_account/" id='bank_nav_2'>Add new account</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false" id='deposit_nav'>
+                        <i class="fa-solid fa-money-bill-transfer"></i>
+                        <span class="ml-3">Deposit Requests</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item">
+                            <a class="dropdown-item" href="/admin_dashboard/depost/" id='deposit_nav_1'>View all Requests</a>
+                            <a class="dropdown-item"  href="/admin_dashboard/approved_depost/" id='deposit_nav_2'>Approved Deposit</a>
+                            <a class="dropdown-item"  href="/admin_dashboard/reject_depost/" id='deposit_nav_3'>Reject Deposit</a>
+                        </li>
+                    </ul>
+                </li>
+
+                <li class="nav-item dropdown">
+                    <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                        aria-expanded="false" id='withdraw_nav'>
+                        <i class="fa-solid fa-money-bill-transfer"></i>
+                        <span class="ml-3">Withdraw Requests</span>
+                    </a>
+                    <ul class="dropdown-menu">
+                        <li class="nav-item">
+                            <a class="dropdown-item" href="/admin_dashboard/withdraw/" id='withdraw_nav_1'>View all Requests</a>
+                            <a class="dropdown-item"  href="/admin_dashboard/approved_withdraw/" id='withdraw_nav_2'>Approved Withdraw</a>
+                            <a class="dropdown-item"  href="/admin_dashboard/reject_withdraw/" id='withdraw_nav_3'>Reject Withdraw</a>
+                        </li>
+                    </ul>
+                </li>
+
+
+                <li class="nav-item ">
+                    <a class="nav-link" href="/admin_dashboard/socail_contact/" id='contact_nav'>
+                        <i class="fa-regular fa-phone-volume"></i>
+                        <span class="ml-3">Manage Contact Information</span>
+                    </a>
+                </li>
+
+                <li class="nav-item ">
+                    <a class="nav-link" href="/admin_dashboard/profile/" id='profile_nav'>
+                        <i class="fa-solid fa-id-card"></i>
+                        <span class="ml-3">User Profile</span>
+                    </a>
+                </li>
+
+                <li class="nav-item ">
+                    <a class="nav-link" href="/admin_dashboard/company_profile/" id='cprofile_nav'>
+                        <i class="fa-solid fa-id-card-clip"></i>
+                        <span class="ml-3">Company Profile</span>
+                    </a>
+                </li>
+
+                <li class="nav-item ">
+                    <a class="nav-link" href="/login/logout/">
+                        <i class="fas fa-power-off"></i>
+                        <span class="ml-3">Logout</span>
+                    </a>
+                </li>
+
+            </ul>
+        </div>
+    </div>
+</nav>

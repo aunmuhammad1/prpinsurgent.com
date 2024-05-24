@@ -1,0 +1,290 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+{% block title %} Rejected deposit Requests{% endblock %}
+
+{% block content %}
+<!-- ============================================================== -->
+<!-- left sidebar -->
+<!-- ============================================================== -->
+
+{% include "sidebar.html" %}
+
+<div class="dashboard-wrapper">
+    <div class="dashboard-ecommerce">
+        <div class="container-fluid dashboard-content ">
+
+            <!-- ============================================================== -->
+            <!-- pageheader  -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="page-header">
+                        <div class="page-breadcrumb">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <a href="/admin_dashboard/" class="breadcrumb-link">Dashboard</a>
+                                    <span> >> Deposit Request</span>                                
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row mt-3">
+                <!-- recent Requests  -->
+                <!-- ============================================================== -->
+                <div class="col-12 container bg-white">
+                    <h3 class="card-header text-center mb-1 mt-3">Rejected Deposit Requests</h3>
+                    {% if messages %}
+                    {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                    <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                            aria-label="Close"></button>
+                    </div>
+                    {% else %}
+                    <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+                        {{ message }}
+                        <button type="button" class="btn-close" data-bs-dismiss="alert"
+                            aria-label="Close"></button>
+                    </div>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
+                    <div class="table-responsive">
+                        <table id="deposit" class="table table-middle" style="width: 100%;">
+                            <thead>
+                                <tr align="center">
+                                    <th>#</th>
+                                    <th>images</th>
+                                    <th>user</th>
+                                    <th>Deposit Amount</th>
+                                    <th>Request time</th>
+                                    <th>Status</th>
+                                    <th>Action</th>
+                                </tr>
+                            </thead>
+
+                            <tbody class="table-group-divider">
+                                {% for i in deposit_request %}
+                                <tr align="center">
+                                    <td>{{forloop.counter}}</td>
+                                    <td> {% for image in i.images.all %}
+                                        <img data-bs-toggle="modal"
+                                        data-bs-target="#viewimg{{i.id}}" src="{{ image.image.url }}"
+                                        alt="Deposit Image" style="width: 50px;cursor:pointer">
+
+                                    {% endfor %}
+                                    </td>
+                                    <td>{{i.user}}</td>
+                                    <td>Rs {{i.amount}} /-</td>
+                                    <td>{{i.deposit_request_at}}</td>
+
+                                    <td>
+                                        {% if i.status == 'Pending' %}
+                                        <b class="badge text-bg-warning" style="font-size:14px">{{i.status}}..</b>
+                                        {% elif i.status == 'Deposit Failed'%}
+                                        <span class="badge text-bg-danger" style="font-size:14px">Rejected</span>
+                                        {% else %}
+                                        <span class="badge text-bg-success" style="font-size:14px">Approved</span>
+                                        {% endif %}
+                                    </td>
+
+                                    <td>
+                                        {% if i.status == 'Pending' %}
+                                        <button class="btn btn-success" data-bs-toggle="modal"
+                                            data-bs-target="#Confirm{{i.id}}">Conform
+                                        </button>
+                                        <button class="btn btn-danger" data-bs-toggle="modal"
+                                            data-bs-target="#Cancel{{i.id}}">Rejected</button>
+                                        {% elif i.status == 'Deposit Failed' %}
+                                          <button class="btn btn-warning" data-bs-toggle="modal"
+                                             data-bs-target="#Review{{i.id}}">
+                                            <b>Review</b>
+                                          </button>
+                                        {% else %}
+                                        <h2 class="badge text-bg-success" style="font-size: 16px;margin-bottom: -1px;">
+                                            Confirm</h2>
+                                        {% endif %}
+                                    </td>
+                                    
+
+                                </tr>
+                                {% endfor %}
+
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+
+            {% for i in deposit_request %}
+            <!-- deposit reject Model -->
+            <div class="modal fade" id="Cancel{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                               Reject Confirmation</h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="col-12">
+                            <h6 class="text-center">
+                                Are you sure, You want to reject this deposit request
+                            </h6>
+                        </div>
+                        <form action="/admin_dashboard/reject_depost/" method="post">
+                            {% csrf_token %}
+                            <input type="text" name="action" hidden value="reject">
+                            <input type='number' name="deposit_id" value="{{i.id}}" hidden>
+                            <table class="modal-body col-12 mb-3">
+                                <tr>
+                                    <td align="center">
+                                        <input type="submit" class="btn btn-outline-danger text-center"
+                                        value="Reject deposit Request">
+                                    </td>
+                                </tr>
+
+                            </table>
+                        </form>
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- depost Confirm Model -->
+            <div class="modal fade" id="Confirm{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                Deposit Confirmation
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="col-12">
+                            <h6 class="text-center">
+                                Are you sure, You want to confirm this deposit request
+                            </h6>
+                        </div>
+                        <form action="/admin_dashboard/reject_depost/" method="post">
+                            {% csrf_token %}
+                            <input type="text" name="action" hidden value="approved">
+                            <input type='number' name="deposit_id" value="{{i.id}}" hidden>
+                            <table class="modal-body col-12 mb-3">
+                                <tr>
+                                    <td align="center">
+                                        <input type="submit" class="btn btn-outline-success text-center"
+                                        value="Approved deposit Request">
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- depost Review Model -->
+            <div class="modal fade" id="Review{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+                aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h1 class="modal-title fs-5" id="exampleModalLabel">
+                                Review Confirmation
+                            </h1>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="col-12">
+                            <h6 class="text-center">
+                                Are you sure, You want to change your decision, confirm this deposit request
+                            </h6>
+                        </div>
+                        <form action="/admin_dashboard/reject_depost/" method="post">
+                            {% csrf_token %}
+                            <input type="text" name="action" hidden value="approved">
+                            <input type='number' name="deposit_id" value="{{i.id}}" hidden>
+                            <table class="modal-body col-12 mb-3">
+                                <tr>
+                                    <td align="center">
+                                        <input type="submit" class="btn btn-outline-success text-center"
+                                        value="Approved deposit Request">
+                                    </td>
+                                </tr>
+                            </table>
+                        </form>
+
+
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- depost images Model -->
+            <div class="modal fade" id="viewimg{{i.id}}" tabindex="-1" aria-labelledby="exampleModalLabel"
+            aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="exampleModalLabel">
+                            Deposit Images
+                        </h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        <div class="table-responsive">
+                            <h4 class="text-center">
+                                Proof image preview
+                            </h4>
+                            <table class="table width:100%">
+                                <tbody>
+                                    {% for image in i.images.all %}
+                                    <tr align="center">
+                                            <td class="col-12" style="justify-content: space-around;">
+                                            <img src="{{ image.image.url }}"
+                                            alt="Deposit Image" style="max-width: 350px;">
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+<script>
+    const targetDiv = document.getElementById("deposit_div");
+    const targetSubDiv = document.getElementById("deposit_div_3");
+    const targetnav = document.getElementById("deposit_nav");
+    const targetSubnav = document.getElementById("deposit_nav_3");
+    targetSubnav.classList.add("active");
+    targetnav.classList.add("active");
+    targetSubDiv.classList.add("active");
+    targetDiv.classList.add("active");
+</script>
+{% endblock %}

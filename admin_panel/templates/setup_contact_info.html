@@ -1,0 +1,272 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+{% block title %} Contact Information{% endblock %}
+
+{% block content %}
+
+{% include "sidebar.html" %}
+
+<div class="dashboard-wrapper">
+    <div class="dashboard-ecommerce">
+        <div class="container-fluid dashboard-content ">
+
+            <!-- ============================================================== -->
+            <!-- pageheader  -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="page-header">
+                        <div class="page-breadcrumb">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <a href="/admin_dashboard/" class="breadcrumb-link">Dashboard</a>
+                                    <span> >> Contact Information</span>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="ecommerce-widget">
+                <div class="row mt-2">
+                    <div class="col-12 mb-3">
+                        <div class="card border-3 border-top border-top-primary">
+                            <div class="card-body row mx-auto">
+
+                                {% if messages %}
+                                {% for message in messages %}
+                                {% if message.tags == 'error' %}
+                                <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                                {% else %}
+                                <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+                                {% if Whatsapp_link %}
+                                <h3 class="text-center">Update Company Details</h3>
+                                <div class="metric-value d-inline-block">
+                                    <form action="/admin_dashboard/socail_contact/" method="POST" class="row g-3"
+                                        enctype="multipart/form-data" id="contactForm_sm">
+                                        {% csrf_token %}
+                                        <input value="update" name="action" hidden>
+                                        <input value="{{Whatsapp_link.id}}" name="id" hidden>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Contact Phone Number</label>
+                                            <input class="no-arrow form-control" type="number" name="phone"
+                                                maxlength="10" minlength="10"
+                                                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                                placeholder="10-digit phone number" required id="phone_input_sm"
+                                                value="{{Whatsapp_link.phone_number}}">
+                                            <span id="error_phonelenght_sm"
+                                                style="display: none; color: red;font-size: 13px;"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Whatsapp Group Join Link</label>
+                                            <input type="text" class="form-control" name="join_link"
+                                                placeholder="Enter Whatsapp Invite link" id="linkInput"
+                                                onblur="validateLink()" value="{{Whatsapp_link.join_link}}">
+                                            <span id="error_link"
+                                                style="display: none; color: red;font-size: 13px;"></span>
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Telegram Channel Join Link</label>
+                                            <input type="text" class="form-control" name="telegram_link"
+                                                placeholder="Enter Telegram Invite link" id="linkInput2"
+                                                onblur="validateLink()" value="{{Whatsapp_link.telegram_link}}" required>
+                                            <span id="error_link2"
+                                                style="display: none; color: red;font-size: 13px;"></span>
+
+                                        </div>
+                                        <div class="col-12 mx-auto">
+                                            <div class="col-lg-4 col-md-3 col-sm-2" style="float: left;"></div>
+                                            <button type="submit" class="btn btn-danger col-lg-4 col-md-6 col-sm-8">
+                                                Update Company Details
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                                <script>
+                                    var error_phonelenght_sm = document.getElementById('error_phonelenght_sm');
+                                    var phone_input_sm = document.getElementById('phone_input_sm');
+
+                                    var error_link = document.getElementById('error_link');
+                                    var linkInput = document.getElementById("linkInput");
+
+                                    var error_link2 = document.getElementById('error_link2');
+                                    var linkInput2 = document.getElementById("linkInput2");
+
+                                    phone_input_sm.onclick = function () {
+                                        error_phonelenght_sm.style.display = 'none'
+                                    };
+                                    linkInput.onclick = function () {
+                                        error_link.style.display = 'none'
+                                    };
+                                    linkInput2.onclick = function () {
+                                        error_link.style2.display = 'none'
+                                    };
+
+
+                                    function validateLink() {
+                                        var linkPattern = /^(ftp|http|https):\/\/[^ "]+$/;
+
+                                        if (!linkPattern.test(linkInput.value)) {
+                                            error_link.style.display = 'block';
+                                            error_link.textContent = 'Please enter a valid Whatsapp invite link';
+                                            linkInput.value = "";
+                                        }
+                                    }
+
+                                    function validateLink2() {
+                                        var linkPattern = /^(ftp|http|https):\/\/[^ "]+$/;
+
+                                        if (!linkPattern.test(linkInput2.value)) {
+                                            error_link2.style.display = 'block';
+                                            error_link2.textContent = 'Please enter a valid Telegram invite link';
+                                            linkInput2.value = "";
+                                        }
+                                    }
+                                    document.getElementById('contactForm_sm').addEventListener('submit', function (event) {
+                                        var minLength_phone_sm = parseInt(phone_input_sm.getAttribute('minlength'));
+                                        var phoneValue_sm = phone_input_sm.value.trim();
+
+
+                                        if (phoneValue_sm.length < minLength_phone_sm) {
+                                            event.preventDefault(); // Prevent form submission
+                                            error_phonelenght_sm.style.display = 'block';
+                                            error_phonelenght_sm.textContent = 'Please enter valid phone number. \n Phone number must be ' + minLength_phone_sm + ' digit long.';
+                                        }
+                                        else if (phoneValue_sm[0] === '0') {
+                                            event.preventDefault(); // Prevent form submission
+                                            error_phonelenght_sm.style.display = 'block';
+                                            error_phonelenght_sm.textContent = 'Phone number first number cannot be 0';
+                                        }
+
+                                    });
+
+
+                                </script>
+                                {% else %}
+                                <h3 class="text-center">Add Contact Details</h3>
+                                <div class="metric-value d-inline-block">
+                                    <form action="/admin_dashboard/socail_contact/" method="POST" class="row g-3"
+                                        enctype="multipart/form-data" id="contactForm">
+                                        {% csrf_token %}
+                                        <input value="add" name="action" hidden>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Contact Phone Number</label>
+                                            <input class="no-arrow form-control" type="number" name="phone"
+                                                maxlength="10" minlength="10"
+                                                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                                placeholder="10-digit phone number" required id="phone_input"
+                                                value="{{Whatsapp_link.phone_number}}">
+                                            <span id="error_phonelenght"
+                                                style="display: none; color: red;font-size: 13px;"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Whatsapp Group Join Link</label>
+                                            <input type="text" class="form-control" name="join_link" id="linkInput"
+                                                onblur="validateLink()" placeholder="Enter Whatsapp Invite link"
+                                                required>
+                                            <span id="error_link"
+                                                style="display: none; color: red;font-size: 13px;"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Telegram Channel Join Link</label>
+                                            <input type="text" class="form-control" name="telegram_link"
+                                                placeholder="Enter Telegram Invite link" id="linkInput2"
+                                                onblur="validateLink()" value="{{Whatsapp_link.telegram_link}}" required>
+                                            <span id="error_link2"
+                                                style="display: none; color: red;font-size: 13px;"></span>
+
+                                        </div>
+                                        <div class="col-12 mx-auto">
+                                            <div class="col-lg-4 col-md-3 col-sm-2" style="float: left;"></div>
+                                            <button type="submit" class="btn btn-danger col-lg-4 col-md-6 col-sm-8">
+                                                Add Contact Details
+                                            </button>
+                                        </div>
+                                        
+                                    </form>
+                                </div>
+                                <script>
+
+                                    var error_phonelenght = document.getElementById('error_phonelenght');
+                                    var phone_input = document.getElementById('phone_input');
+
+                                    var error_link = document.getElementById('error_link');
+                                    var linkInput = document.getElementById("linkInput");
+
+
+                                    phone_input.onclick = function () {
+                                        error_phonelenght.style.display = 'none'
+                                    };
+
+                                    linkInput.onclick = function () {
+                                        error_link.style.display = 'none'
+                                    };
+
+
+                                    function validateLink() {
+                                        var linkPattern = /^(ftp|http|https):\/\/[^ "]+$/;
+
+                                        if (!linkPattern.test(linkInput.value)) {
+                                            error_link.style.display = 'block';
+                                            error_link.textContent = 'Please enter a valid Whatsapp invite link';
+                                            linkInput.value = "";
+                                        }
+                                    }
+                                    document.getElementById('contactForm').addEventListener('submit', function (event) {
+                                        var minLength_phone = parseInt(phone_input.getAttribute('minlength'));
+                                        var phoneValue = phone_input.value.trim();
+                                        var linkPattern = /^(ftp|http|https):\/\/[^ "]+$/;
+
+                                        if (!linkPattern.test(linkInput.value)) {
+                                            error_link.style.display = 'block';
+                                            error_link.textContent = 'Please enter a valid Whatsapp invite link';
+                                            linkInput.value = "";
+                                        }
+
+                                        if (phoneValue.length < minLength_phone) {
+                                            event.preventDefault(); // Prevent form submission
+                                            error_phonelenght.style.display = 'block';
+                                            error_phonelenght.textContent = 'Please enter valid phone number. \n Phone number must be ' + minLength_phone + ' digit long.';
+                                        }
+                                        else if (phoneValue[0] === '0') {
+                                            event.preventDefault(); // Prevent form submission
+                                            error_phonelenght.style.display = 'block';
+                                            error_phonelenght.textContent = 'Phone number first number cannot be 0';
+                                        }
+
+                                    });
+
+                                </script>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    const targetDiv = document.getElementById("contact_div");
+    const targetnav = document.getElementById("contact_nav");
+    targetnav.classList.add("active");
+    targetDiv.classList.add("active");
+</script>
+
+{% endblock %}

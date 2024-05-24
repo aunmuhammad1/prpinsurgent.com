@@ -1,0 +1,215 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+{% load my_filters %}
+{% block title %} add plan{% endblock %}
+
+{% block content %}
+{% include "sidebar.html" %}
+
+
+<div class="dashboard-wrapper">
+    <div class="dashboard-ecommerce">
+        <div class="container-fluid dashboard-content ">
+
+            <!-- ============================================================== -->
+            <!-- pageheader  -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="page-header">
+                        <div class="page-breadcrumb">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item">
+                                        <a href="/admin_dashboard/" class="breadcrumb-link">Dashboard</a>
+                                        <span> >> Add New Plan</span>
+                                    </li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ecommerce-widget">
+                <div class="row mt-2">
+                    <div class="col-12 mb-3">
+                        <div class="card border-3 border-top border-top-primary">
+                            <div class="card-body row mx-auto">
+                                <h3 class="text-center">Add New Plan</h3>
+                                {% if messages %}
+                                {% for message in messages %}
+                                {% if message.tags == 'error' %}
+                                <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                                {% else %}
+                                <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+                                <div class="metric-value d-inline-block">
+                                    <form action="/admin_dashboard/add_plan/" method="POST" class="row g-3"
+                                        enctype="multipart/form-data" id="planForm">
+                                        {% csrf_token %}
+                                        <div class="col-md-6">
+                                            <label  class="form-label">Plan Name</label>
+                                            <input type="text" class="form-control" name="plan_name"
+                                                required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label  class="form-label">Plan category</label>
+                                            <select class=" form-control" name="Category"  id="Category" required>
+                                                <option value="">Select Plan Category</option>
+                                                <option value="Simple Plan">Simple Plan</option>
+                                                <option value="VIP Plan">VIP Plan</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label  class="form-label">Plan Vip Level</label>
+                                            <select class=" form-control" name="plan_level"  id="plan_level" required>
+                                                <option value="">Select Plan Level</option>
+                                                {% for i in 16|times %}
+                                                  <option value="{{ i }}">VIP {{ i }}</option>
+                                                {% endfor %}
+                                            </select>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label  class="form-label">Plan Price</label>
+                                            <input class="no-arrow form-control" maxlength="10" name="plan_price"
+                                            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                            type="number" required id="plan_price" />
+                                            <span id="error_plan_price" style="display: none; color: red;font-size: 13px;" class="ml-4"></span>
+
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Plan image</label>
+                                            <input type="file" class="form-control" name="plan_img" accept="image/*"
+                                                required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label  class="form-label">Total income</label>
+                                            <input class="no-arrow form-control"  name="total_income"
+                                            type="number" required id="total_income" />
+                                            <span id="error_total_income" style="display: none; color: red;font-size: 13px;" class="ml-4"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label  class="form-label">Plan Duration(in days) </label>
+                                            <input class="no-arrow form-control" maxlength="5" name="duration"
+                                            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                            type="number" required id="duration" />
+                                            <span id="error_duration" style="display: none; color: red;font-size: 13px;" class="ml-4"></span>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <label class="form-label">Maximiun Buy Limit</label>
+                                            <input class="no-arrow form-control" maxlength="5" name="quantity"
+                                            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                            type="number" required id="quantity" />
+                                            <span id="error_quantity" style="display: none; color: red;font-size: 13px;" class="ml-4"></span>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">
+                                                <b>Lanuch Now</b>
+                                            </label>
+                                            <div class="form-check ml-3" >
+                                                <input class="form-check-input" checked type="radio"
+                                                    name="lanuch" required value="True"> Yes
+
+                                            </div>
+                                            <div class="form-check ml-3" >
+                                                <input class="form-check-input" type="radio"
+                                                    name="lanuch" required value="False"> No
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="col-12 mx-auto">
+                                            <div class="col-lg-4 col-md-3 col-sm-2" style="float: left;"></div>
+                                            <button type="submit" class="btn btn-danger col-lg-4 col-md-6 col-sm-8">
+                                                Add New Plan
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var error_plan_price = document.getElementById('error_plan_price');
+    var error_total_income = document.getElementById('error_total_income')
+    var error_duration = document.getElementById('error_duration')
+    var error_quantity = document.getElementById('error_quantity')
+
+    var priceField = document.getElementById('plan_price');
+    var total_incomeField = document.getElementById('total_income')
+    var durationField = document.getElementById('duration')
+    var quantityField = document.getElementById('quantity')
+
+    priceField.onclick = function() {
+        error_plan_price.style.display = 'none'
+    };
+    total_incomeField.onclick = function() {
+        error_total_income.style.display = 'none'
+    };
+    durationField.onclick = function() {
+        error_duration.style.display = 'none'
+    };
+    quantityField.onclick = function() {
+        error_quantity.style.display = 'none'
+    };
+
+    document.getElementById('planForm').addEventListener('submit', function(event) {
+    var priceValue = priceField.value.trim();
+    var total_incomeValue = total_incomeField.value.trim();
+    var durationValue = durationField.value.trim();
+    var quantityValue = quantityField.value.trim();
+
+
+    if (priceValue < 1) {
+        event.preventDefault(); // Prevent form submission
+        error_plan_price.style.display = 'block';
+        error_plan_price.textContent = "Minimium plan price is 1 Rs atleast" ;
+    }
+    if (total_incomeValue < 1) {
+        event.preventDefault(); // Prevent form submission
+        error_total_income.style.display = 'block';
+        error_total_income.textContent = "Minimium plan income is 1 Rs atleast" ;
+    }
+    if (durationValue < 1) {
+        event.preventDefault(); // Prevent form submission
+        error_duration.style.display = 'block';
+        error_duration.textContent = "Minimium plan duration is atleast 1 day" ;
+    }
+    if (quantityValue < 1) {
+        event.preventDefault(); // Prevent form submission
+        error_quantity.style.display = 'block';
+        error_quantity.textContent = "Minimium plan Buy Limit is atleast 1" ;
+    }
+    });
+</script>
+<script>
+    const targetDiv = document.getElementById("plan_div");
+    const targetSubDiv = document.getElementById("plan_div_2");
+    const targetNav = document.getElementById("plan_nav");
+    const targetSubNav = document.getElementById("plan_nav_2");
+    targetSubNav.classList.add("active");
+    targetNav.classList.add("active");
+    targetSubDiv.classList.add("active");
+    targetDiv.classList.add("active");
+</script>
+{% endblock %}

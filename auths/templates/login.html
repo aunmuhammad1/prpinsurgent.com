@@ -1,0 +1,269 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<style>
+    body {
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: white;
+    }
+    
+    .mainHeader{
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 100px;
+    }
+
+    .login-heading{
+        margin-top: 80px;
+        color: #3868D4;
+        font-size: 24px;
+        font-weight: 700;
+    }
+    .loginForm{
+        width: 80%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+
+    }
+    .container{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    .inputContainer{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        margin-top: 20px;
+        border: 1px solid #3868D4;
+        border-radius: 25px;
+    }
+    .inputContainer input{
+        padding: 10px;
+        font-size: 16px;
+        border: none;
+        width: 85%;
+    }
+
+    .input-icon{
+        width: 30px;
+        height: 30px;
+    }
+
+    .btnConatiner{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 45px;
+    }
+
+    button{
+        width: 100%;
+        height: 50px;
+        background-color: #3868D4;
+        color: white;
+        font-size: 16px;
+        font-weight: 700;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+    }
+
+    button:hover{
+        background-color: #2F5CBB;
+    }
+
+    .signupBtnCon{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 20px;
+    }
+
+    .signupBtnCon a{
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .signupBtnCon a span{
+        font-size: 16px;
+        font-weight: 700;
+        color: gray;
+    }
+
+    .signupBtnCon a span:last-child{
+        color: #3868D4;
+    }
+
+    input:focus-within {
+        outline: none;
+    }
+
+    .snackbar {
+        visibility: hidden;
+        min-width: 250px;
+        margin-left: -125px;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 2px;
+        padding: 16px;
+        position: fixed;
+        z-index: 1;
+        left: 50%;
+        bottom: 30px;
+        font-size: 17px;
+    }
+
+    .snackbar.show {
+        visibility: visible;
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    @-webkit-keyframes fadein {
+        from {
+            bottom: 0;
+            opacity: 0;
+        }
+
+        to {
+            bottom: 30px;
+            opacity: 1;
+        }
+    }   
+
+</style>
+
+
+<body >
+    <div class="mainHeader" >
+        <img src="../../static/images/user/Vector 24.png" class="w-100" alt="">
+    </div>
+    <h4 id="snackbar_error"></h4>
+    <h4 id="snackbar"></h4>
+
+    <div class="container">
+        <!-- <img src="../../static/images/app/auth-header.png" class="w-100" alt=""> -->
+        <form method="POST" action="/login/" id="loginForm" class="loginForm" autocomplete="off">
+
+            {% csrf_token %}
+            {% if messages %}
+                {% for message in messages %}
+                    {% if message.tags == 'error' %}
+                                <script>
+                                    var snackbar = document.getElementById("snackbar_error");
+                                    snackbar.className = "show";
+                                    snackbar.textContent = '{{ message }}'
+                                    setTimeout(function(){ snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+                            </script>
+                    {% else %}
+                                <script>
+                                    var snackbar2 = document.getElementById("snackbar");
+                                    snackbar2.className = "show";
+                                    snackbar2.textContent = '{{ message }}'
+                                    setTimeout(function(){ snackbar2.className = snackbar2.className.replace("show", ""); }, 3000);
+                            </script>
+                    {% endif %}
+                {% endfor %}
+            {% endif %}
+
+            <div class="login-heading" >
+                Login in Now
+            </div>
+
+            <div class="inputContainer">
+                <i class="fa-solid fa-phone" style="color: #3868D4"></i>
+                <!-- <img src="../../static/images/app/login-icon-one.png" class="p-3 input-icon"> -->
+                <input type="number" name="phone" maxlength="10" minlength="10" id="phone"
+                oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                placeholder="Phone" required >
+            </div>
+            <div class="inputContainer">
+                <i class="fa-sharp fa-solid fa-key" style="color: #3868D4;"></i>
+                <!-- <img src="../../static/images/app/login-icon-two.png" class="p-3 input-icon"> -->
+                <input type="password" name="password" id="password" minlength="8" placeholder="Password" required>
+            </div>
+            <div class="btnConatiner">
+                <button  id="submitButton" type="button" >
+                    Log in
+                </button>            
+          </div>
+          <div class="signupBtnCon">
+            <a href="/signup/" style="text-decoration:none">
+                <span >Are you a new user? </span><span>Register</span>
+            </a>
+        </div>
+        </form>
+    </div>
+
+    <script>
+        var submitButton = document.getElementById("submitButton");
+        var phone = document.getElementById('phone');
+        var snackbar = document.getElementById("snackbar_error");
+
+
+
+        document.getElementById('submitButton').addEventListener('click', function () {
+            var minLength_phone = parseInt(phone.getAttribute('minlength'));
+            var phoneValue = phone.value.trim();
+
+            if (phoneValue.length < minLength_phone) {
+                event.preventDefault(); // Prevent form submission
+                snackbar.className = "show";
+                snackbar.textContent = 'Please enter valid 10 -digit phone number'
+                setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+            }
+            else if (phoneValue[0] === '0') {
+                event.preventDefault(); // Prevent form submission
+                snackbar.className = "show";
+                snackbar.textContent = 'first number cannot be 0'
+                setTimeout(function () { snackbar.className = snackbar.className.replace("show", ""); }, 3000);
+            }
+            else {
+                submitButton.disabled = true;
+                // submitButton.textContent = "Login....";
+                document.getElementById('loginForm').submit();
+            }
+        });
+    </script>
+        <script>
+            // JavaScript to toggle the password visibility
+            const passwordInput = document.getElementById('password');
+            const eyeIcon = document.getElementById('eye-icon');
+            const passwordToggle = document.getElementById('password-toggle');
+    
+            passwordToggle.addEventListener('click', () => {
+                if (passwordInput.type === 'password') {
+                    passwordInput.type = 'text';
+                    eyeIcon.src = '../../static/images/eye-open.png'; // Change the image to an open eye
+                } else {
+                    passwordInput.type = 'password';
+                    eyeIcon.src = '../../static/images/hide1.png'; // Change the image to a closed eye
+                }
+            });
+        </script>
+    </div>
+</body>
+
+
+
+{% endblock %}

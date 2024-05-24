@@ -1,0 +1,387 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block title %}Sign Up{% endblock %}
+
+{% block content %}
+
+<style>
+    body {
+        margin: 0;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        background-color: white;
+    }
+
+    .mainHeader {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 100px;
+    }
+
+    .signup-heading {
+        margin-top: 174px;
+        color: #3868D4;
+        font-size: 24px;
+        font-weight: 700;
+    }
+    
+    #signupForm {
+        width: 80%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    
+    .container {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+    }
+    
+    .inputContainer {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: row;
+        margin-top: 20px;
+        border: 1px solid #3868D4;
+        border-radius: 25px;
+    }
+    
+    .inputContainer input {
+        padding: 10px;
+        font-size: 16px;
+        border: none;
+        width: 85%;
+        background-color: transparent;
+    }
+    
+    .input-icon {
+        width: 30px;
+        height: 30px;
+    }
+
+    .btnContainer {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 30px;
+    }
+
+    button {
+        width: 100%;
+        height: 50px;
+        background-color: #3868D4;
+        color: white;
+        font-size: 16px;
+        font-weight: 700;
+        border: none;
+        border-radius: 25px;
+        cursor: pointer;
+    }
+
+    button:hover {
+        background-color: #2F5CBB;
+    }
+
+    .loginBtnCon {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        flex-direction: column;
+        margin-top: 10px;
+    }
+
+    .loginBtnCon a {
+        text-decoration: none;
+        font-size: 16px;
+        font-weight: 700;
+    }
+
+    .loginBtnCon a span {
+        font-size: 16px;
+        font-weight: 700;
+        color: gray;
+    }
+
+    .loginBtnCon a span:last-child {
+        color: #3868D4;
+    }
+
+    .snackbar {
+        visibility: hidden;
+        min-width: 250px;
+        margin-left: -125px;
+        background-color: #333;
+        color: #fff;
+        text-align: center;
+        border-radius: 2px;
+        padding: 16px;
+        position: fixed;
+        z-index: 1;
+        left: 50%;
+        bottom: 30px;
+        font-size: 17px;
+    }
+
+    .snackbar.show {
+        visibility: visible;
+        -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+        animation: fadein 0.5s, fadeout 0.5s 2.5s;
+    }
+
+    @-webkit-keyframes fadein {
+        from {
+            bottom: 0;
+            opacity: 0;
+        }
+        to {
+            bottom: 30px;
+            opacity: 1;
+        }
+    }
+
+
+
+
+    input:focus {
+        outline: none;
+    }
+
+    
+    .invitation-container {
+        position: absolute;
+        display: inline-block;
+        right: 72px;
+    }
+
+    .invitation-container::before {
+        content: "";
+        background-image: url(../../static/images/new/invitation-code.png);
+        background-repeat: no-repeat;
+        background-size: cover;
+        position: absolute;
+        top: 0;
+        left: 20px;
+        width: 100%;
+        height: 100%;
+    }
+
+    .invitation-content {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+        left: 20px;
+
+    }
+
+    .checkboxCon {
+        width: 100%;
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        flex-direction: row;
+        margin-top: 20px;
+    }
+
+    .number-box {
+        color: white;
+        font-size: 10px;
+        font-family: Montserrat;
+        font-weight: 700;
+        word-wrap: break-word;
+        margin: 5px;
+        /* Additional styling for rotations if needed */
+    }
+
+    .verify_code {
+        width: 70%;
+    }
+
+    @media (min-width: 310px) and (max-width: 460px) {
+        .verify_code {
+            width: 60%;
+        }
+
+        input {
+            width: 70%
+        }
+    }
+
+    @media (min-width: 265px) and (max-width: 309.99px) {
+        .verify_code {
+            width: 40%;
+        }
+
+        input {
+            width: 65%
+        }
+    }
+
+    @media (max-width: 264.99px) {
+        .verify_code {
+            width: 30%;
+        }
+
+        input {
+            width: 50%
+        }
+    }
+
+
+</style>
+
+<body>
+    <div class="mainHeader">
+        <img src="{% static 'images/user/Vector 24.png' %}" class="w-100" alt="">
+    </div>
+    
+    <h4 id="snackbar_error"></h4>
+    <h4 id="snackbar"></h4>
+
+    <form method="POST" action="/signup/" id="signupForm" class="">
+        {% csrf_token %}
+        {% if messages %}
+        {% for message in messages %}
+        {% if message.tags == 'error' %}
+        <script>
+            var snackbar = document.getElementById("snackbar_error");
+            snackbar.className = "show";
+            snackbar.textContent = '{{ message }}';
+            setTimeout(function() {
+                snackbar.className = snackbar.className.replace("show", "");
+            }, 3000);
+        </script>
+        {% else %}
+        <script>
+            var snackbar2 = document.getElementById("snackbar");
+            snackbar2.className = "show";
+            snackbar2.textContent = '{{ message }}';
+            setTimeout(function() {
+                snackbar2.className = snackbar2.className.replace("show", "");
+            }, 3000);
+        </script>
+        {% endif %}
+        {% endfor %}
+        {% endif %}
+
+        <div class="signup-heading">
+            Sign Up Now
+        </div>
+        <div class="inputContainer">
+            <i class="fa-solid fa-phone" style="color: #3868D4"></i>
+            <input type="number" name="phone" maxlength="10" minlength="10" id="phone"
+                oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                placeholder="Phone" required>
+        </div>
+        <div class="inputContainer">
+            <i class="fa-sharp fa-solid fa-key" style="color: #3868D4;"></i>
+            <input type="password" name="password" id="password" minlength="8" placeholder="Password" required>
+        </div>
+        <div class="inputContainer">
+            <i class="fa-solid fa-lock" style="color: #3868D4;"></i>
+            <input placeholder="Verification Code" type="text" required name="verify_code"
+                oninput="if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                maxlength="4" minlength="4">
+            <div class="invitation-container">
+                <div class="invitation-content">
+                    {% for number in verify_code %}
+                    <div class="number-box">
+                        {{ number }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+        <div class="inputContainer">
+            <i class="fa-solid fa-user" style="color: #3868D4;"></i>
+            <input placeholder="Invitation Code" type="number" class="no-arrow ps-3 input-text-style" name="reference"
+                value="{{ref_id}}">
+        </div>
+
+        <div class="checkboxCon">
+            <input type="checkbox" style="float:left; width:20px;" required> 
+            <span class="extra-text align-text-bottom">I accept the privacy policy</span>              
+        </div>
+        <div class="btnContainer">
+            <button id="submitButton" class="submit-btn p-2" type="submit">
+                Sign up 
+            </button>
+        </div>
+       
+        <div class="loginBtnCon">
+            <a href="/login/" style="text-decoration:none">
+                <span>have an account? </span>
+                <span>Login</span>
+            </a>
+        </div>
+    </form>
+
+    <script>
+        var phone = document.getElementById('phone');
+        var password = document.getElementById('password');
+        var submitButton = document.getElementById("submitButton");
+        var snackbar = document.getElementById("snackbar_error");
+
+        document.getElementById('signupForm').addEventListener('submit', function(event) {
+            var minLength_password = parseInt(password.getAttribute('minlength'));
+            var passwordValue = password.value.trim();
+            var minLength_phone = parseInt(phone.getAttribute('minlength'));
+            var phoneValue = phone.value.trim();
+
+            if (passwordValue.length < minLength_password) {
+                event.preventDefault();
+                snackbar.className = "show";
+                snackbar.textContent = 'Password must be at least ' + minLength_password + ' characters long.';
+                setTimeout(function() {
+                    snackbar.className = snackbar.className.replace("show", "");
+                }, 3000);
+            } else if (phoneValue.length < minLength_phone) {
+                event.preventDefault();
+                snackbar.className = "show";
+                snackbar.textContent = 'Please enter a valid phone number';
+                setTimeout(function() {
+                    snackbar.className = snackbar.className.replace("show", "");
+                }, 3000);
+            } else if (phoneValue[0] === '0') {
+                event.preventDefault();
+                snackbar.className = "show";
+                snackbar.textContent = 'Phone number first number cannot be 0';
+                setTimeout(function() {
+                    snackbar.className = snackbar.className.replace("show", "");
+                }, 3000);
+            } else {
+                submitButton.disabled = true;
+            }
+        });
+    </script>
+    <script>
+        // JavaScript to toggle the password visibility
+        const passwordInput = document.getElementById('password');
+        const eyeIcon = document.getElementById('eye-icon');
+        const passwordToggle = document.getElementById('password-toggle');
+
+        passwordToggle.addEventListener('click', () => {
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                eyeIcon.src = "{% static 'images/eye-off.png' %}";
+            } else {
+                passwordInput.type = 'password';
+                eyeIcon.src = "{% static 'images/eye.png' %}";
+            }
+        });
+    </script>
+</body>
+{% endblock %}

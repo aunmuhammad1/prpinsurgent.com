@@ -1,0 +1,200 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block title %}Deposit History{% endblock %}
+
+{% block content %}
+
+<head>
+    <!--<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.2/dist/css/bootstrap.min.css">-->
+    <!--<link rel="stylesheet" href="{% static './css/history.css' %}">-->
+</head>
+<style>
+         .heading_label {
+            background-color: #3F3F3F;
+            border-radius: 0px 0px 0px 47px;
+        }
+       .recharge-plan {
+        position: absolute;
+        width: -webkit-fill-available;
+        }
+        .plan-main-heading {
+        font-size: 12px;
+        font-weight: 700;
+        color: white;
+        font-family: Montserrat;
+    }
+
+    .sub-heading {
+        font-size: 12px;
+        font-weight: 300;
+        color: #FFFFFF;
+        font-family: Montserrat;
+
+    }
+        .underline {
+            border-bottom: dashed;
+            opacity: 0.5; 
+            padding: 3px;
+        }
+        .desposit_history_plan{
+            box-shadow: 0px 0px 4px 0px rgba(0, 0, 0, 0.18);
+            border-radius: 10px;
+        }
+</style>
+<body>
+    <div class="text-center pt-4">
+        <span style="font-family: Montserrat;
+        font-size: 16px; font-weight: 500; color: #000000;
+        ">Recharge Record</span>
+    </div>
+    <div class="container mt-3">
+        {% if deposit_history %}
+            {% for i in deposit_history %}
+                <div class="recharge-plan mt-3 px-4">
+                    <div class="d-flex justify-content-between">
+                        <div>
+                            <span class="plan-main-heading">Recharge Status</span>
+                        </div>
+                        <div class="pe-2">
+                            {% if i.status == 'Deposit Success' %}
+                        <img src="../../static/images/Future bike/succes-icon.png" style="width: 12px;">
+                            {% elif i.status == 'Deposit Failed' %}
+                        <img src="../../static/images/Future bike/failure-icon.png" style="width: 12px;">
+                            {% else %}
+                        <img src="../../static/images/Future bike/pending-icon.png" style="width: 12px;">
+                            {% endif %}
+                        </div>
+                    </div>
+                    <!-- <div class="underline me-2"></div> -->
+                    <div class="d-flex justify-content-between mt-1">
+                        <div class="withdraw-label">
+                            <span class="sub-heading">Recharge Amount </span >
+                        </div>
+                        <div>
+                            <span class="sub-heading pe-2">RS {{i.amount |floatformat:"2"}}</span>
+                        </div>
+                    </div>
+                
+                    <!-- <div class="underline me-2"></div> -->
+                
+                    <div class="d-flex justify-content-between mt-1">
+                        <div class="order-label">
+                            <span class="sub-heading">Order Time</span>
+                        </div>
+                        <div class="date_time ">
+                            <span class="sub-heading pe-2">{{i.deposit_request_at|date:"d/m/Y H:i"}}</span>
+                        </div>
+                    </div>
+                </div>
+                <div>
+                    <img src="../../static/images/Future bike/recharge-record-bg.png" style="width: 100%;" alt="">
+                </div>
+            {% endfor %}
+        {% else %}
+            <div class="mt-5 text-center">
+                <img src="../../static/images/new/no-record-found.png" alt="" style="width: 230px;">
+            </div>
+        {% endif %}
+
+    </div>
+
+    <script>
+        $(document).ready(function () {
+            // Handle pagination link clicks
+
+            $(document).on('click', '#pagination-income a', function (event) {
+                event.preventDefault();
+                var pageUrl = $(this).attr('href');
+
+                // Make AJAX request to fetch the new page data
+                $.ajax({
+                    url: pageUrl,
+                    type: 'GET',
+                    dataType: 'html',
+                    success: function (data) {
+                        var result = $('<div />').append(data);
+                        var newContent = result.find('#income').html();
+                        var newPagination = result.find('#pagination-income').html();
+
+                        // Update the content and pagination
+                        $('#income').html(newContent);
+                        $('#pagination-income').html(newPagination);
+                    },
+                    error: function () {
+                        alert('Error occurred while fetching page.');
+                    }
+                });
+            });
+
+            $(document).on('click', '#pagination-recharge a', function (event) {
+                event.preventDefault();
+                var pageUrl = $(this).attr('href');
+
+                // Make AJAX request to fetch the new page data
+                $.ajax({
+                    url: pageUrl,
+                    type: 'GET',
+                    dataType: 'html',
+                    success: function (data) {
+                        var result = $('<div />').append(data);
+                        var newContent = result.find('#recharge').html();
+                        var newPagination = result.find('#pagination-recharge').html();
+
+                        // Update the content and pagination
+                        $('#recharge').html(newContent);
+                        $('#pagination-recharge').html(newPagination);
+                    },
+                    error: function () {
+                        alert('Error occurred while fetching page.');
+                    }
+                });
+            });
+
+            $(document).on('click', '#pagination-withdraw a', function (event) {
+                event.preventDefault();
+                var pageUrl = $(this).attr('href');
+
+                // Make AJAX request to fetch the new page data
+                $.ajax({
+                    url: pageUrl,
+                    type: 'GET',
+                    dataType: 'html',
+                    success: function (data) {
+                        var result = $('<div />').append(data);
+                        var newContent = result.find('#withdraw').html();
+                        var newPagination = result.find('#pagination-withdraw').html();
+
+                        // Update the content and pagination
+                        $('#withdraw').html(newContent);
+                        $('#pagination-withdraw').html(newPagination);
+                    },
+                    error: function () {
+                        alert('Error occurred while fetching page.');
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+
+        function showTab(tabName) {
+            // Hide all tab contents
+            var tabContents = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < tabContents.length; i++) {
+                tabContents[i].style.display = "none";
+            }
+            // Deactivate all tabs
+            var tabs = document.getElementsByClassName("tab");
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+            // Show selected tab content
+            document.getElementById(tabName).style.display = "block";
+            // Activate selected tab
+            event.currentTarget.classList.add("active");
+        }
+    </script>
+    {% include 'nav-bar.html' %}
+</body>
+{% endblock %}

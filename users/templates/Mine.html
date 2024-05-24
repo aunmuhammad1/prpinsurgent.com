@@ -1,0 +1,485 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block title %} Mine{% endblock %}
+
+{% block content %}
+<style>
+    body {
+
+        font-family: Montserrat;
+    }
+
+    #header-card {
+        background: #3F3F3F;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+        border-radius: 0px 0px 0px 47px;
+    }
+
+    .plans-label {
+        font-size: 18px;
+        font-weight: 700;
+        color: white;
+    }
+
+    .banner-container {
+        position: relative;
+        /* Create a positioning context for absolute positioning */
+        margin: 0 auto;
+        /* Center the container horizontally */
+    }
+
+    .text-overlay-mine {
+        position: absolute;
+        left: 22%;
+        top: 44px;
+        transform: translate(-50%, -50%);
+        padding: 10px;
+
+    }
+
+    .more-div-icon {
+        width: 24px;
+        height: 24px;
+    }
+
+    .heading_label {
+        border-radius: 0px 0px 40px 40px;
+        background-color: #9400FF;
+        height: 220px;
+    }
+
+    .text-overlay {
+        position: absolute;
+        top: 66%;
+        left: 34%;
+        transform: translate(-50%, -50%);
+    }
+
+    .mine-page-heading-white {
+        color: #000000;
+        font-size: 11px;
+        font-weight: 100;
+        line-height: 11px;
+        margin-top: 5px;
+    }
+
+    .mine-page-sub-heading-white {
+        color: #000000;
+        font-size: 10px;
+        font-weight: 700;
+        margin-top: 5px;
+    }
+
+    .plan-card {
+        width: 175px;
+        height: 100px;
+        position: relative;
+        background-size: cover;
+    }
+
+    .navigation-bar {
+        background: #146266;
+        box-shadow: 0px 0px 4px 0px #0000001A;
+        border-radius: 10px;
+        width: 160px;
+    }
+
+    .container {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-around;
+        /* Adjust as needed for your layout */
+    }
+
+    .box {
+        flex: 1 1 27%;
+        /* Adjust as needed for your layout */
+        box-sizing: border-box;
+        /* margin: 10px; */
+        text-align: center;
+        position: relative;
+        /* Relative positioning for absolute child positioning */
+    }
+
+    .box img {
+        max-width: 100%;
+        height: auto;
+        border-radius: 50%;
+    }
+
+    .text {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        color: white;
+        /* Optional: Adjust text color for better visibility */
+    }
+
+    .btn-label {
+        font-family: Piazzolla;
+        font-size: 9px;
+        font-weight: 700;
+        color: #011013;
+        margin-top: 5px;
+    }
+
+    .main-btn-heading {
+        font-family: DM Serif Text;
+font-size: 10px;
+font-weight: 400;
+color: #FFFFFF;
+    }
+
+    .main-btn-subheading {
+        font-family: DM Serif Text;
+font-size: 10px;
+font-weight: 400;
+color: #FFFFFF;
+margin-top: 2px;
+    }
+.navigation-btn{
+    font-family: Istok Web;
+font-size: 12px;
+font-weight: 400;
+color: #FFFFFF;
+    }
+    .plan-card {
+        display: flex;
+        align-items: center;
+        /* width: 145px; */
+        height: 100px;
+        border-radius: 10px;
+        background-size: cover;
+        position: relative;
+    }
+    .balance-card-bg{
+        background-image: url('../../static/images/new/mine-income.png');
+    }
+    .income-card-bg{
+        background-image: url('../../static/images/new/mine-balance.png');
+    }
+    .home-page-heading-white {
+        color: white;
+        font-family: Nexa;
+font-size: 10px;
+font-weight: 100;
+
+    }
+
+    .home-page-sub-heading-white {
+        font-family: Montserrat;
+font-size: 10px;
+font-weight: 700;
+ color: #FFFFFF;
+    }
+    .header-bg-img{
+        height: 160px;
+        width: 100%;
+        position: relative;
+        top: 0;
+    }
+    .img-fluid{
+        position: absolute;
+        top: 0;
+        right: 0;
+        z-index: 1;
+    }
+    .user-img{
+        position: relative;
+        top: 18%;
+        left: 7%;
+    }
+    .user-details{
+        color: white;
+        position: absolute;
+        top: 15%;
+        left: 26%;
+    }
+    .refer_code{
+        font-size: 17px;
+        font-weight: 700;
+    }
+    .balance{
+        font-size: 17px;
+        font-weight: 700;
+    }
+    .balance span {
+        color: #F29D38;
+    }
+    .user{
+        width: 100%;
+        height: 100px;
+
+    }
+    .row-option{
+        position: relative;
+        display: flex;
+        justify-content: space-around;
+        flex-direction: row;
+        align-items: center;
+        margin-top: -42px;
+        z-index: 2;
+    }
+    .row-option a div img{
+        padding: 5px;
+        align-items: center;
+    }
+    .row-option a span {
+        color: #000000;
+        gap : 5px;
+    }
+    .row-option a {
+        text-decoration: none;
+        color: #000000;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap : 5px;
+    }
+    .col-option{
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        padding: 0 15px;
+        gap: 10px;
+        margin-top: 20px;
+    }
+    .col-option-item{
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+        padding: 10px;
+        border-radius: 10px;
+        background-color: #F2F2F2;
+    }
+    .col-option-item span{
+        font-size: 15px;
+        font-weight: 700;
+    }
+    .col-option-item .img-text{
+        display: flex;
+        justify-content: space-between;
+        flex-direction: row;
+        align-items: center;
+        gap: 10px;
+    }
+    .arrow{
+        width: 30px;
+        height: 30px;
+    }
+    .Logoutbtn{
+        display: flex;
+        justify-content: center;
+    }
+
+
+</style>
+
+<body>
+
+
+    <div class="mx-auto" id="snackbar_error"></div>
+    <div id="snackbar"></div>
+    <div class="">
+        <div class="header-bg-img"  style="background-image: url('../../static/images/user/mine/Rectangle 702.png'); background-size: cover; background-position: center;" >
+            <div class="user">
+                <a class="user-img"  href='/user_profile/'  ><img src="../../static/images/user/mine/Ellipse 150.png" alt=""></a>
+                <div class="user-details" >
+                    <div class="refer_code" >{{request.user.refer_code}}</div>
+                    <div class="balance" >Balance: <span>Rs. {{user_wallet.balance |floatformat:"0"}}</span></div>
+                </div>
+            </div>
+            <img src="../../static/images/user/satellite.png" class="img-fluid" alt=""> 
+        </div>
+    </div>
+    <div class="row-option">
+        <a href="/deposit_history/" ><div style="background-image: url('../../static/images/user/mine/Ellipse\ 145.png'); background-size: cover; background-position: center;" >
+            <img src="../../static/images/user/mine/wallet 2.png" alt="">
+            
+        </div>
+        <span class="home-page-heading-white">Recharge</span>
+        </a>
+        <a href="/withdraw_history/"><div style="background-image: url('../../static/images/user/mine/Ellipse\ 145.png'); background-size: cover; background-position: center;"  >
+            <img src="../../static/images/user/mine/wallet 1.png" alt="">
+        </div>
+        <span class="home-page-heading-white">Withdraw</span>
+        </a>
+        <a href='/account/' ><div style="background-image: url('../../static/images/user/mine/Ellipse\ 145.png'); background-size: cover; background-position: center;" >
+            <img src="../../static/images/user/mine/setting 1.png" alt="">
+        </div>
+        <span class="home-page-heading-white">Account</span>
+        </a>
+        <a href="/services/" ><div style="background-image: url('../../static/images/user/mine/Ellipse\ 145.png'); background-size: cover; background-position: center;"  >
+            <img src="../../static/images/user/mine/customer-service 1.png" alt="">
+        </div>
+        <span class="home-page-heading-white">Service</span>
+        </a>
+    </div>
+    <div class="col-option" >
+        <a href="#">
+            <div class="col-option-item" >
+                <div class="img-text">
+                    <img class="arrow"  src="../../static/images/user/mine/income guide.png" alt="">
+                    <span>Tutorial</span>
+                </div>
+                <img src="../../static/images/user/mine/icon _arrow right.png" alt="">
+            </div>
+        </a>
+        <a href="/user_profile/">
+            <div class="col-option-item" >
+                <div class="img-text">
+                    <img class="arrow"  src="../../static/images/user/mine/Group.png" alt="">
+                    <span>Change Password</span>
+                </div>
+                <img src="../../static/images/user/mine/icon _arrow right.png" alt="">
+            </div>
+        </a>
+        <a href="/withdraw_password/">
+            <div class="col-option-item" >
+                <div class="img-text">
+                    <img class="arrow"  src="../../static/images/user/mine/change password.png" alt="">
+                    <span>Transaction Password</span>
+                </div>
+                <img src="../../static/images/user/mine/icon _arrow right.png" alt="">
+            </div>
+        </a>
+        <a href="/services/">
+            <div class="col-option-item" >
+                <div class="img-text">
+                    <img class="arrow"  src="../../static/images/user/mine/custmer service.png" alt="">
+                    <span>Customer Care</span>
+                </div>
+                <img src="../../static/images/user/mine/icon _arrow right.png" alt="">
+            </div> 
+        </a>
+        <a href="/about_us/">
+            <div class="col-option-item" >
+                <div class="img-text">
+                    <img class="arrow"  src="../../static/images/user/mine/Group 89.png" alt="">
+                    <span>About Us</span>
+                </div>
+                <img src="../../static/images/user/mine/icon _arrow right.png" alt="">
+            </div>
+        </a>
+        <a href="#">
+            <div class="col-option-item" >
+                <div class="img-text">
+                    <img class="arrow"  src="../../static/images/user/mine/download APK.png" alt="">
+                    <span>Download APK</span>
+                </div>
+                <img src="../../static/images/user/mine/icon _arrow right.png" alt="">
+            </div>
+        </a>
+        <div class="Logoutbtn">
+            <a href="/login/logout/">                
+                <button class="btn btn-primary" style="background-color: #214579; border-radius: 25px; color: white; font-size: 15px; padding: 10px 50px;" >Signout</button>
+            </a>
+        </div>  
+    </div>
+    
+    <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog  modal-dialog-centered">
+            <div class="modal-content mx-4" style="border-radius: 25px;">
+                <div class="modal-header d-flex justify-content-center"
+                    style="background: #BE6EF8; border-radius: 25px 25px 0px 0px;">
+                    <span class=" text-center text-capitalize text-white" id="staticBackdropLabel"
+                        style="font-size: 12px; font-weight: 800;">congratulations
+                    </span>
+                </div>
+                <div class="modal-body">
+                    <div class="d-flex justify-content-center">
+                        <img src="{% static './images/new/income-detail.png' %}"
+                            style="width: 34px; height: 34px; margin-right: 5px;">
+                        <h1 style="color: #020202; font-size: 25px; ">RS<strong>15</strong></h1>
+                    </div>
+                    <div class="text-center mt-2">
+                        {% if daily_reward %}
+                        <button class="px-5 p-2 btn" type="button" onclick="collectedReward()"
+                            style="background-color: #BE6EF8; color: white; border-radius: 25px; font-size: 12px;"
+                            id="collect_btn">
+                            Collected
+                        </button>
+                        {% else %}
+                        <button class="px-5 p-2" onclick="collectReward()" type="button"
+                            style="background-color: #BE6EF8; color: white; border-radius: 25px; font-size: 12px;"
+                            id="collect_btn">
+                            Collect
+                        </button>
+                        <button class="px-4 btn text-center" type="button" onclick="collectedReward()"
+                            style="background-color: #BE6EF8; color: white; border-radius: 25px; font-size: 12px;display:none"
+                            id="collect_btn2">
+                            Collected
+                        </button>
+                        {% endif %}
+
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    {% include 'nav-bar.html' %}
+    <script>
+        var dailyreward_amount = document.getElementById('dailyreward_amount')
+        var amount = user_wallet.balance
+        // Function to show the snackbar message
+        function showSnackbar() {
+            var snackbar = document.getElementById("snackbar");
+            var collect_btn = document.getElementById("collect_btn");
+            amount = amount + 15;
+            dailyreward_amount.textContent = amount.toFixed(2);
+            //collect_btn.disabled = true;
+            //collect_btn.textContent= "Already Collected";
+            document.getElementById('collect_btn2').style.display = 'block';
+            document.getElementById('collect_btn2').style.marginLeft = "15%"
+            document.getElementById('collect_btn2').style.width = "70%"
+            collect_btn.style.display = 'none';
+            snackbar.className = "show";
+            snackbar.textContent = 'Successfully'
+            setTimeout(function() {
+                snackbar.className = snackbar.className.replace("show", "");
+            }, 3000); // Hide the snackbar after 3 seconds (adjust as needed)
+        }
+        // Function to handle the "Collect" button click
+        function collectReward() {
+            // Hide the modal popup
+            $('#exampleModal').modal('hide');
+            $.ajax({
+                url: '/popup/dailyreward/',
+                type: 'GET',
+                success: function(data) {
+                    // The AJAX request was successful
+                    showSnackbar();
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error calling view function:', error);
+                    // Handle the error if necessary
+                }
+            });
+        }
+
+        function collectedReward() {
+            // Hide the modal popup
+            $('#exampleModal').modal('hide');
+            var snackbar = document.getElementById("snackbar");
+            snackbar.className = "show";
+            snackbar.textContent = 'Already Collected'
+            setTimeout(function() {
+                snackbar.className = snackbar.className.replace("show", "");
+            }, 3000);
+        }
+    </script>
+
+    <script>
+        const targetDiv = document.getElementById("mine_div");
+        targetDiv.classList.add("active");
+    </script>
+
+</body>
+
+{% endblock %}

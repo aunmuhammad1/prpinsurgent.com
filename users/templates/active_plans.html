@@ -1,0 +1,292 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block title %}My Investment{% endblock %}
+
+{% block content %}
+
+<head>
+    <style>
+        .center-right {
+            display: flex;
+            justify-content: flex-end;
+            align-items: center;
+        }
+
+        .heading_label {
+            border-radius: 0px 0px 0px 50px;
+        }
+
+        .tabs {
+            text-align: center;
+            background: rgba(217, 217, 217, 1);
+            border-radius: 25px;
+            width: 245px;
+        }
+
+        .tab {
+            cursor: pointer;
+            font-weight: 600;
+            padding: 7px 15px;
+            color: #3F3F3F91;
+            font-size: 8.44px;
+        }
+
+        .tab:hover {
+            background: #3F3F3F;
+            color: white;
+            border-radius: 25px;
+        }
+
+        .plans-label {
+            font-size: 16px;
+            font-weight: 500;
+            color: #000000;
+            font-family: Montserrat;
+        }
+
+        #header-card {
+            background: #3F3F3F;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            border-radius: 0px 0px 0px 47px;
+        }
+
+        .income-label {
+            font-family: Gotham;
+            font-size: 9px;
+            font-weight: 700;
+            color: #000000;
+        }
+
+        .income-sub-label {
+            font-family: Gotham;
+            font-size: 9px;
+            font-weight: 400;
+            color: #000000;
+        }
+
+        .progress-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .custom-icon {
+            position: absolute;
+            top: 0;
+            width: 100%;
+            background-color: #1E02C5;
+            border-radius: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+        }
+
+        .plan-card {
+            display: flex;
+            align-items: center;
+            height: 100px;
+            border-radius: 10px;
+            background-image: url('../../static/images/Future bike/plan-card-bg.png');
+            background-size: cover;
+            position: relative;
+        }
+
+        .home-page-heading-white {
+            color: white;
+            font-family: Montserrat;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .home-page-sub-heading-white {
+            font-family: Montserrat;
+            font-size: 14px;
+            font-weight: 700;
+            color: #FFFFFF;
+        }
+
+        .device-card {
+            display: flex;
+            flex-direction: column;
+            
+            padding: 15px;
+            border-radius: 10px;
+            background: #F0F0F0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .device-card img {
+            width: 50px;
+            height: 50px;
+            border-radius: 10px;
+        }
+
+        .device-card .details {
+            flex-grow: 1;
+            padding-left: 15px;
+        }
+
+        .device-card .details h5 {
+            margin: 0;
+            font-size: 16px;
+            font-weight: 700;
+        }
+
+        .device-card .details p {
+            margin: 0;
+            font-size: 14px;
+            color: #333;
+        }
+
+        .device-card .price {
+            font-size: 16px;
+            font-weight: 700;
+            color: #000000;
+        }
+
+        .device-card .stats {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 10px;
+        }
+
+        .device-card .stats .stat {
+            text-align: center;
+            flex-grow: 1;
+        }
+
+        .device-card .stats .stat:not(:last-child) {
+            margin-right: 10px;
+        }
+
+        .device-card .stats .stat h4 {
+            margin: 0;
+            font-size: 14px;
+            font-weight: 700;
+        }
+
+        .device-card .stats .stat p {
+            margin: 0;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .back-button {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            font-size: 21px;
+            font-weight: 700;
+            color: #214579;
+            margin-top: 16px;
+            gap: 110px;
+        }
+
+        .back-button i {
+            margin-right: 10px;
+        }
+
+        .device {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-direction: row;
+        }
+
+        .device-inner {
+            display: flex;
+            align-items: center;
+            flex-direction: row;
+            gap: 15px;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="col-12 m-0 p-0">
+        <div class="px-3">
+            <!-- Back Button -->
+            <div class="back-button">
+                <button onclick="window.history.back()" class="btn"
+                ><i class="fas fa-arrow-left"></i></button>
+                <span>Device</span>
+            </div>
+
+            <!-- graf -->
+            <div class="mx-auto text-center">
+                <h4 id="snackbar_error"></h4>
+            </div>
+            <div class="mx-auto col-sm-10">
+                <h4 id="snackbar"></h4>
+            </div>
+
+            <!-- Device Cards -->
+            <div class="mt-3">
+                {% if User_plans %}
+                    {% for plan in User_plans %}
+                        <div class="device-card">
+                            <div class="device">
+                                <div class="device-inner">
+                                    <img src="{% static 'images/user/device-image.png' %}" alt="Device Image">
+                                    <h5>{{ plan.plan.name }}</h5>
+                                </div>
+                                <div class="price">
+                                    Rs {{ plan.plan.price }}
+                                </div>
+                            </div>
+                            <div class="details">
+                                <div class="stats">
+                                    <div class="stat">
+                                        <h4>Rs {{ plan.plan.daily_income | floatformat:"2" }}</h4>
+                                        <p>Daily Income</p>
+                                    </div>
+                                    <div class="stat">
+                                        <h4>Rs {{ plan.plan.hourly_income | floatformat:"2" }}</h4>
+                                        <p>Hourly Income</p>
+                                    </div>
+                                    <div class="stat">
+                                        <h4>Rs {{ plan.plan.price }}</h4>
+                                        <p>Total Income</p>
+                                    </div>
+                                    <div class="stat">
+                                        <h4>{{ plan.plan.plan_duration }}</h4>
+                                        <p>Cycle</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="mt-5 text-center">
+                        <img src="{% static 'images/new/no-record-found.png' %}" alt="" width="230px">
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+
+    {% include 'nav-bar.html' %}
+    <script>
+        const targetDiv = document.getElementById("activeplan_div");
+        targetDiv.classList.add("active");
+    </script>
+    <script>
+        function showTab(tabName) {
+            // Hide all tab contents
+            var tabContents = document.getElementsByClassName("tab-content");
+            for (var i = 0; i < tabContents.length; i++) {
+                tabContents[i].style.display = "none";
+            }
+            // Deactivate all tabs
+            var tabs = document.getElementsByClassName("tab");
+            for (var i = 0; i < tabs.length; i++) {
+                tabs[i].classList.remove("active");
+            }
+            // Show selected tab content
+            document.getElementById(tabName).style.display = "block";
+            // Activate selected tab
+            event.currentTarget.classList.add("active");
+        }
+    </script>
+</body>
+{% endblock %}

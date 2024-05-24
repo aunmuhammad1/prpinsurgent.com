@@ -1,0 +1,57 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block title %} About Us{% endblock %}
+
+{% block content %}
+
+<head>
+  <link rel="stylesheet" href="{% static './css/about_us.css' %}">
+</head>
+<style>
+ .about-description{
+  font-family: Montserrat;
+font-size: 9px;
+font-weight: 500;
+line-height: 18px;
+text-align: left;
+margin-bottom: 15px;
+
+ }
+</style>
+
+<body>
+  <div class="container">
+    <h1 style="font-size: 16px; font-weight: 600; font-family: 600;">Contact Us</h1>
+
+    <div class="image">
+      <img src="../../static/images/new/about-one.png" style="width: 100%;">
+    </div>
+    <div>
+      <p class="about-description">Welcome to the users of Future Bike, this company has many products for you, which you can buy and earn very well, and many features have been added. It will work together with international countries and in it you are given some tasks which you can complete to increase your earnings.</p>
+    </div>
+
+    <div class="image">
+      <img src="../../static/images/new/about-two-img.png" style="width: 100%;">
+    </div>
+
+    <div>
+       
+      <p class="about-description">Traditional steel frames have been replaced by lighter-weight aluminum or carbon fiber models. They offer improved strength while reducing the overall weight significantly. All of these make them faster and easier to maneuver on hills or other challenging terrains.</p>
+
+    </div>
+    <div class="image">
+      <img src="../../static/images/new/about-three.png" style="width: 100%;">
+    </div>
+    <div>
+      <p class="about-description">The full-suspension racing bike with electric drive enables sporty-fast riding over very long distances. The name says it all: depending on the use of electronic support, riders can cover up to 300 kilometres a day on the Longrider. This also enables all those who do not have the physical prerequisites of a trained long-distance cyclist to head for extremely long distances by bike.</p>
+    </div>
+    <div class="image">
+      <img src="../../static/images/new/about-four.png" style="width: 100%;">
+    </div>
+    <div>
+      <p class="about-description">The futuristic design of the Longrider Volta Stradale is inspired by that of a racing machine. The construction is based on a method that is currently used primarily in aircraft and automobile manufacturing: The carbon monocoque is more elaborate and cost-intensive to produce than a conventional bicycle frame made of several tubes. On the other hand, it allows more sturdiness and stiffness with little mass – lower weight also means higher performance. </p>
+    </div>
+  </div>
+  {% include 'nav-bar.html' %}
+</body>
+{% endblock %}

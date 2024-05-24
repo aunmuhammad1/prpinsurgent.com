@@ -1,0 +1,101 @@
+ #snackbar {
+   visibility: hidden;
+   min-width: 250px;
+   margin-left: -125px;
+   background-color: rgba(31, 28, 28, 0.5);
+   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+   color: white;
+   text-align: center;
+   border-radius: 10px;
+   padding: 16px;
+   position: fixed;
+   z-index: 1;
+   left: 50%;
+   bottom: 50%;
+   font-size: 17px;
+ }
+
+ #snackbar.show {
+   visibility: visible;
+   -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+   animation: fadein 0.5s, fadeout 0.5s 2.5s;
+ }
+
+ #snackbar_error {
+   visibility: hidden;
+   width: 40%;
+   margin-left: 5px;
+   background-color: rgba(31, 28, 28, 0.5);
+   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+   color: white;
+   text-align: center;
+   border-radius: 10px;
+   padding: 16px;
+   position: fixed;
+   z-index: 1;
+   left: 30%;
+   bottom: 50%;
+   font-size: 17px;
+ }
+
+ #snackbar_error.show {
+   visibility: visible;
+   -webkit-animation: fadein 0.5s, fadeout 0.5s 2.5s;
+   animation: fadein 0.5s, fadeout 0.5s 2.5s;
+ }
+
+ @-webkit-keyframes fadein {
+   from {
+     bottom: 50%;
+     opacity: 0;
+   }
+
+   to {
+     bottom: 50%;
+     opacity: 1;
+   }
+ }
+
+ @keyframes fadeout {
+   from {
+     bottom: 50%;
+     opacity: 1;
+   }
+
+   to {
+     bottom: 50%;
+     opacity: 0;
+   }
+ }
+
+ @media (min-width: 576px) and (max-width: 767px) {
+   #snackbar_error {
+     width: 60%;
+     left: 20%;
+     bottom: 70px;
+     font-size: 12px;
+   }
+
+   #snackbar {
+     width: 50%;
+     left: 25%;
+     bottom: 70px;
+     font-size: 12px;
+   }
+ }
+
+ @media (max-width: 575.99px) {
+   #snackbar_error {
+     width: 80%;
+     margin-left: 5px;
+     left: 10%;
+     font-size: 12px;
+   }
+
+   #snackbar {
+     width: 80%;
+     margin-left: 5px;
+     left: 10%;
+     font-size: 12px;
+   }
+ }

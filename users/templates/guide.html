@@ -1,0 +1,23 @@
+{% extends 'user_base.html' %}
+{% load static %}
+{% block title %} Income Guide{% endblock %}
+
+{% block content %}
+<style>
+    .heading_label {
+        border-radius: 0px 0px 0px 47px;
+        background-color: #3F3F3F;
+        height: 126px;
+    }
+</style>
+  
+    <div class=" text-center p-4">
+        <span style="font-size:16px; font-weight: 500; color: #000000; ">Guide</span>
+    </div>
+<div class="container mt-2">
+
+    <img src="{% static './images/new/Post-design.jpg' %}"  class="align-self-center w-100">
+
+</div>
+{% include 'nav-bar.html' %}
+{% endblock %}

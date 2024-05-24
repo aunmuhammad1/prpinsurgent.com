@@ -1,0 +1,155 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+{% block title %} Update bank account{% endblock %}
+
+{% block content %}
+{% include "sidebar.html" %}
+
+<div class="dashboard-wrapper">
+    <div class="dashboard-ecommerce">
+        <div class="container-fluid dashboard-content ">
+
+            <!-- ============================================================== -->
+            <!-- pageheader  -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="page-header">
+                        <div class="page-breadcrumb">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item">
+                                        <a href="/admin_dashboard/" class="breadcrumb-link">Dashboard</a>
+                                        <span> >> Update Bank Account</span>
+                                    </li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="ecommerce-widget">
+                <div class="row mt-2">
+                    <div class="col-12 mb-3">
+                        <div class="card border-3 border-top border-top-primary">
+                            <div class="card-body row mx-auto">
+                                <h3 class="text-center">Update Bank Account</h3>
+                                {% if messages %}
+                                {% for message in messages %}
+                                {% if message.tags == 'error' %}
+                                <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                                {% else %}
+                                <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+                                <div class="metric-value d-inline-block">
+                                    <form action="/admin_dashboard/update_account/" method="POST" class="row g-3"
+                                        enctype="multipart/form-data" id="bankForm">
+                                        {% csrf_token %}
+                                        <div class="col-md-6">
+                                            <label  class="form-label">Account Name</label>
+                                            <input type="text" class="form-control" name="account_name"
+                                                required value="{{update_account.account_title}}">
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label  class="form-label">Account number</label>
+                                            <input class="no-arrow form-control" maxlength="20" name="account_number" minlength="10"
+                                            oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);"
+                                            type="number" required id="account_number"  value="{{update_account.account_number}}"/>
+                                            <span class="focus-input100"></span>
+
+                                            <span id="error_account_number" style="display: none; color: red;font-size: 13px;" class="ml-4"></span>
+                                        </div>
+                                        <input value="{{update_account.id}}" name="id" hidden />
+                                        <div class="col-md-6">
+                                            <label for="bank">Select Bank:</label>
+                                            <select class=" form-control" name="bank"  id="bank" required>
+                                                <option value="">Select Your Bank</option>
+                                                <!-- {% if update_account.bank_id %}
+                                                    {% if update_account.bank_ == 'Easypasia' %}
+                                                    <option value="JazaCash">JazaCash</option>
+                                                        <option value="Easypasia" selected>Easypasia</option>
+                                                    {% elif update_account.bank == 'JazaCash' %}
+                                                        <option value="JazaCash" selected>JazaCash</option>
+                                                        <option value="Easypasia">Easypasia</option>
+                                                    {% endif %}
+                                                {% else %}
+                                                    <option value="Easypasia">Easypasia</option>
+                                                    <option value="JazaCash">JazaCash</option>
+                                                {% endif %} -->
+                                                {% for i in bank_names %}
+                                                {% if update_account.bank_id.id == i.id %}
+                                                  <option value="{{i.id}}" selected>{{i.bank_name}}</option>
+                                                {% else %}
+                                                   <option value="{{i.id}}">{{i.bank_name}}</option>
+                                                {% endif %}
+                                            {% endfor %}
+                                            </select>
+                                        </div>
+
+                                        <div class="col-12 mx-auto">
+                                            <div class="col-lg-4 col-md-3 col-sm-2" style="float: left;"></div>
+                                            <button type="submit" class="btn btn-danger col-lg-4 col-md-6 col-sm-8">
+                                                Update Bank Account
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+<script>
+    var error_account_number = document.getElementById('error_account_number');
+    var account_number = document.getElementById('account_number');
+
+
+    account_number.onclick = function() {
+        error_account_number.style.display = 'none'
+    };
+
+
+    document.getElementById('bankForm').addEventListener('submit', function(event) {
+    var account_numberValue = account_number.value.trim();
+    var minLength_account_number = parseInt(account_number.getAttribute('minlength'));
+
+
+    if (account_numberValue.length < minLength_account_number) {
+        event.preventDefault(); // Prevent form submission
+        error_account_number.style.display = 'block';
+        error_account_number.textContent = "Account number must be 10 digit long" ;
+    }
+    else if (account_numberValue[0] === '0') {
+            event.preventDefault(); // Prevent form submission
+            error_account_number.style.display = 'block';
+            error_account_number.textContent = 'Account number first number cannot be 0';
+        }
+    });
+</script>
+<script>
+    const targetDiv = document.getElementById("bank_div");
+    const targetSubDiv = document.getElementById("bank_div_1");
+    const targetnav = document.getElementById("bank_nav");
+    const targetSubnav = document.getElementById("bank_nav_1");
+    targetSubnav.classList.add("active");
+    targetnav.classList.add("active");
+    targetSubDiv.classList.add("active");
+    targetDiv.classList.add("active");
+</script>
+{% endblock %}

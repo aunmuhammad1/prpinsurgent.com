@@ -1,0 +1,226 @@
+{% extends 'admin_base.html' %}
+{% load static %}
+{% block title %} Company Profile{% endblock %}
+
+{% block content %}
+
+{% include "sidebar.html" %}
+
+
+<div class="dashboard-wrapper">
+    <div class="dashboard-ecommerce">
+        <div class="container-fluid dashboard-content ">
+
+            <!-- ============================================================== -->
+            <!-- pageheader  -->
+            <!-- ============================================================== -->
+            <div class="row">
+                <div class="col-xl-12 col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="page-header">
+                        <div class="page-breadcrumb">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <a href="/admin_dashboard/" class="breadcrumb-link">Dashboard</a>
+                                    <span> >> Company profile</span>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            {% if Company_profile %}
+            <section class="box-shadow-sm bg-white container-lg my-2 py-3">
+                {% if messages %}
+                {% for message in messages %}
+                {% if message.tags == 'error' %}
+                <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% else %}
+                <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>
+                {% endif %}
+                {% endfor %}
+                {% endif %}
+                <div class="table-responsive">
+                    <table class="table w-100 table-borderless">
+                        <tbody>
+                            <tr align="center">
+                                {% if Company_profile.company_logo %}
+                                <td colspan="3"><img src="/media/{{ Company_profile.company_logo }}"
+                                        style="max-width:150px;height:150px;" class="rounded-circle img-fluid">
+                                </td>
+                                {% else %}
+                                <td colspan="3"><img src="{% static  'deault_profile_image.png' %}"
+                                        style="width:100px;border-radius:50%;"></td>
+                                {% endif %}
+                            </tr>
+                            <tr align="center">
+                                <td align="center" colspan="3">
+                                    <div class="btn-block">
+                                        <a class="mr-1 delete-record-link" data-toggle="modal" href="#Change_img">
+                                            <button class='button btn-danger btn' type="submit">
+                                                <b style="color:white;">Change Company Logo</b>
+                                            </button>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td></td>
+                            </tr>
+                            <tr style="background-color:#49738f;">
+                                <td align="center" colspan="3"><b style="color:white;">
+                                    Company information</b>
+                                </td>
+                            </tr>
+
+                            <form action="/admin_dashboard/company_profile/" method="POST">
+                                {% csrf_token %}
+                                <input value="update" name="action" hidden>
+                               <input value="{{Company_profile.id}}" name="id" hidden>
+                                <tr>
+
+                                    <td align="left" colspan="3">
+                                        <label class="form-label">Company Name</label>
+                                        <input type="text" class="form-control" name="company_name"
+                                         required value="{{Company_profile.company_name}}" placeholder="Enter company name">
+                                    </td>
+                                </tr>
+                                <tr align="center">
+                                    <td align="left" colspan="3">
+                                        <label>Company Address:</label>
+                                        <textarea placeholder="Enter your company address" rows="5" name="company_address"
+                                            class="w-100 form-control"
+                                            required>{{Company_profile.company_address}}</textarea>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td align="center" colspan="3">
+                                        <div class="btn-block">
+                                            <button class='button btn-danger btn' type="submit">
+                                                <b style="color:white;">Update Details</b>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </form>
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+            {% else %}
+            <div class="ecommerce-widget">
+                <div class="row mt-2">
+                    <div class="col-12 mb-3">
+                        <div class="card border-3 border-top border-top-primary">
+                            <div class="card-body row mx-auto">
+
+                                {% if messages %}
+                                {% for message in messages %}
+                                {% if message.tags == 'error' %}
+                                <div class="alert alert-danger alert-dismissible fade show mt-3" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                                {% else %}
+                                <div class="alert alert-success alert-dismissible fade show mt-2" role="alert">
+                                    {{ message }}
+                                    <button type="button" class="btn-close" data-bs-dismiss="alert"
+                                        aria-label="Close"></button>
+                                </div>
+                                {% endif %}
+                                {% endfor %}
+                                {% endif %}
+                                <h3 class="text-center">Add Company Details</h3>
+                                <div class="metric-value d-inline-block">
+                                    <form action="/admin_dashboard/company_profile/" method="POST" class="row g-3"
+                                        enctype="multipart/form-data">
+                                        {% csrf_token %}
+                                        <input value="add" name="action" hidden>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Company Name</label>
+                                            <input type="text" class="form-control" name="company_name" required>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <label class="form-label">Company logo</label>
+                                            <input type="file" class="form-control" name="company_logo" accept="image/*"
+                                                required>
+                                        </div>
+                                        <div class="col-12">
+                                            <label class="form-label">Company Address</label>
+                                            <textarea class="form-control w-100" rows="6" name="company_address"
+                                                required></textarea>
+                                            <span class="focus-input100"></span>
+                                        </div>
+
+                                        <div class="col-12 mx-auto">
+                                            <div class="col-lg-4 col-md-3 col-sm-2" style="float: left;"></div>
+                                            <button type="submit" class="btn btn-danger col-lg-4 col-md-6 col-sm-8">
+                                                Add Company Details
+                                            </button>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                {% endif %}
+            </div>
+
+
+            <div aria-hidden="true" class="modal" id="Change_img" role="dialog" tabindex="-1">
+                <div class="modal-dialog p-3" role="document" style="margin-top: 130px;">
+                    <div class="modal-content text-center">
+                        <div class="modal-header">
+                            <button aria-label="Close" class="btn-close" data-dismiss="modal" type="button"></button>
+                        </div>
+                        <div class="modal-body tab-content">
+                            <h5 class="text-center">Select New Image </h5>
+                            <div class="table-responsive">
+                                <table class="table width:100% align-middle">
+                                    <form action="/admin_dashboard/company_profile/" enctype="multipart/form-data"
+                                        method="POST">
+                                        {% csrf_token %}
+                                        <input value="update" name="action" hidden>
+                                        <input value="{{Company_profile.id}}" name="id" hidden>
+                                        <tr align="center">
+                                            <td>
+                                                <h6 style="color:green">
+                                                    <input accept="image/*" name="company_logo" required type="file">
+                                                </h6>
+                                            </td>
+                                        </tr>
+                                        <tr align="center">
+                                            <td>
+                                                <input class="btn btn-danger" style="color:white;" type="submit"
+                                                    value="Change" />
+                                            </td>
+                                        </tr>
+                                    </form>
+                                </table>
+                                <br />
+                            </div>
+                            <br />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    const targetDiv = document.getElementById("cprofile_div");
+    const targetnav = document.getElementById("cprofile_nav");
+    targetnav.classList.add("active");
+    targetDiv.classList.add("active");
+</script>
+{% endblock %}
